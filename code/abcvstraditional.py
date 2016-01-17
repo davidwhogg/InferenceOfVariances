@@ -1,6 +1,9 @@
 """
 This file is part of the InferenceOfVariance project.
 Copyright 2016 David W. Hogg (SCDA).
+
+# To-do
+- Write ABC code.
 """
 
 import numpy as np
