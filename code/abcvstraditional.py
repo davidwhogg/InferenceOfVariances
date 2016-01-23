@@ -3,14 +3,15 @@ This file is part of the InferenceOfVariance project.
 Copyright 2016 David W. Hogg (SCDA).
 
 # To-do
-- Write ABC code.
+- Horrible, horrible `for` loops.
+- Write adaptive ABC code.  Right now it uses simple prior sampling, which SUX.
 """
 
 import numpy as np
 from corner import corner
 
 def make_fake_data(N):
-    return Truth[0] + np.sqrt(Truth[1]) * np.random.normal(size=N)
+    return hoggdraw(Truth, N)
 
 def ln_pseudo_likelihood(stats, pars, variances):
     empiricalmean, empiricalvar = stats
@@ -63,14 +64,20 @@ def mcmc(pars0, lnp, nsteps, args):
         parss[k,:] = pars
     return parss
 
-def main(N):
+def hoggdraw(stats, N):
+    return stats[0] + np.sqrt(stats[1]) * np.random.normal(size=N)
+
+def hoggvar(data, mean):
+    return np.sum((data - mean) ** 2) / (len(data) - 1)
+
+def main(N, prior_samples=None):
     Nstr = "{:04d}".format(N)
 
     print("main: making fake data")
     np.random.seed(23)
     data = make_fake_data(N)
     empiricalmean = np.mean(data)
-    empiricalvar = np.sum((data - empiricalmean) ** 2) / (N - 1)
+    empiricalvar = hoggvar(data, empiricalmean)
     stats = np.array([empiricalmean, empiricalvar])
     print(data, stats)
 
@@ -79,6 +86,8 @@ def main(N):
     correct_mcmc_samples = mcmc(pars0, ln_correct_posterior, 2 ** 16, (data, ))
     accept = correct_mcmc_samples[1:] == correct_mcmc_samples[:-1]
     print("acceptance ratio", np.mean(accept))
+    thinfactor = 8
+    correct_mcmc_samples = correct_mcmc_samples[::thinfactor] # thin
     print(correct_mcmc_samples)
 
     print("main: plotting correct posterior samples")
@@ -95,9 +104,9 @@ def main(N):
     means = np.zeros(M)
     vars = np.zeros(M)
     for m in range(M):
-        foo = stats[0] + np.sqrt(stats[1]) * np.random.normal(size=N)
+        foo = hoggdraw(stats, N)
         em = np.mean(foo)
-        ev = np.sum((foo - em) ** 2) / (N - 1)
+        ev = hoggvar(foo, em)
         means[m] = em
         vars[m] = ev
     variances = np.array([np.var(means), np.var(vars)])
@@ -108,15 +117,42 @@ def main(N):
     pseudo_mcmc_samples = mcmc(pars0, ln_pseudo_posterior, 2 ** 16, (stats, variances, ))
     accept = pseudo_mcmc_samples[1:] == pseudo_mcmc_samples[:-1]
     print("acceptance ratio", np.mean(accept))
-    print(pseudo_mcmc_samples)
+    pseudo_mcmc_samples = pseudo_mcmc_samples[::thinfactor] # thin
+    print(pseudo_mcmc_samples.shape, pseudo_mcmc_samples)
 
     print("main: plotting pseudo posterior samples")
-    labels = ["mean", "var"]
-    ranges = [prior_info[0:2], prior_info[2:4]]
     fig = corner(pseudo_mcmc_samples, bins=128, labels=labels, range=ranges)
     pfn = "./pseudo_{}.png".format(Nstr)
     fig.savefig(pfn)
     print(pfn)
+
+    if prior_samples is None:
+        print("main: getting prior samples (this might take a while)")
+        pars0 = Truth
+        prior_samples = mcmc(pars0, ln_prior, 2 ** 23, ())
+        accept = prior_samples[1:] == prior_samples[:-1]
+        print("acceptance ratio", np.mean(accept))
+        print(prior_samples.shape, prior_samples)
+
+    print("main: running ABC censoring (this might take a while)")
+    squared_distances = np.zeros(len(prior_samples))
+    for i, pars in enumerate(prior_samples):
+        data = hoggdraw(pars, N)
+        mean = np.mean(data)
+        squared_distances[i] = -2. * ln_pseudo_posterior([mean, hoggvar(data, mean)], stats, variances)
+    percentile = 100. * len(correct_mcmc_samples) / len(prior_samples)
+    threshold = np.percentile(squared_distances, percentile)
+    abc_samples = prior_samples[squared_distances < threshold]
+    print("threshold", threshold)
+    print(abc_samples.shape, abc_samples)
+
+    print("main: plotting ABC samples")
+    fig = corner(abc_samples, bins=128, labels=labels, range=ranges)
+    pfn = "./abc_{}.png".format(Nstr)
+    fig.savefig(pfn)
+    print(pfn)
+
+    return prior_samples
 
 if __name__ == "__main__":
 
@@ -125,5 +161,6 @@ if __name__ == "__main__":
     prior_info = np.array([0., 10., 0., 100.]) # min and max of mean and variance priors
     stepsizes = np.array([2., 2.])
 
+    prior_samples = None
     for N in [5, 23, 87, 167]:
-        main(N)
+        prior_samples = main(N, prior_samples=prior_samples)
