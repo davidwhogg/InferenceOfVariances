@@ -1,0 +1,62 @@
+\documentclass[12pt, letterpaper, preprint]{aastex}
+
+\begin{document}
+
+\title{Inference of variances:\\
+       Implications for cosmological large-scale structure experiments}
+\author{
+  David~W.~Hogg\altaffilmark{1,2}
+}
+\affil{Simons Center for Data Analysis,
+       New York}
+\altaffiltext{1}{also: Center for Cosmology and Particle Physics,
+                       Department of Physics,
+                       New York University}
+\altaffiltext{2}{also: Center for Data Science,
+                       New York University}
+\email{david.hogg@nyu.edu}
+
+\begin{abstract}
+The study of large-scale structure is (at present) primarily the study
+of variances, since the power spectrum or correlation function are
+two-point statistics.
+Present-day large-scale structure experiments generally perform
+cosmological inferences using a pseudo-likelihood that compares a
+point estimate of the two-point function to an equivalent estimate
+from a simulation or theory.
+Here we show---with toy problems---that this procedure in general
+produces incorrect posterior inferences about the variance (and
+therefore cosmological parameters).
+However, we also show that if the same pseudo-likelihood is used
+\emph{not} as a likelihood in a standard probabilistic inference but
+rather as a \emph{distance metric} in an approximate Bayesian
+computation (ABC) method, correct posterior inferences can be drawn.
+We discuss the relationships between the toy problems shown here and
+the standard cosmological inferences, and try to suggest places where
+a change from the standard incorrect method to the ABC method would
+have the biggest impacts.
+We argue that this is likely to be important at the baryon acoustic
+scale.
+\end{abstract}
+
+Present-day large-scale structure experiments are fundamentally
+projects to measure the variance of cosmological fields, such as the
+galaxy, quasar, intergalactic medium, or mass fields.
+Indeed, if the initial conditions of the Universe are very close to
+Gaussian (and they are) and if the evolution of the Universe is very
+close to linear (as it is on large scales), then the mean and variance
+of the density field (on some scale) are sufficient statistics to
+infer everything about the initial conditions (at that scale).
+Thus, the measurement or inference of variance as a function of
+scale---or, equivalently, inference of the power spectrum or the
+two-point auto-correlation function---is critical to inference of the
+cosmological initial conditions and the cosmological parameters.
+There is an enormous literature on making these cosmological
+measurements!
+Here we won't address this literature in detail.
+We are going to step back and look at issues of principle in measuring
+variances, and see if there are small changes to be made to
+present-day cosmological practice that might improve our cosmological
+inferences.
+
+\end{document}
