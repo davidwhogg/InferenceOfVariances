@@ -195,7 +195,8 @@ generates the data is unknown (and, essentially, unknowable).
 
 This made-up pseudo-likelihood is patently absurd:
 For one, it does not represent anyone's beliefs about the data generation.
-For another, it has support at negative variances!
+For another, it has no pathology or odd behavior when the variance $V$
+goes to zero or negative!
 That is, it doesn't even respect the basic properties of variances.
 And yet, this is \emph{precisely analogous to the standard practice in
   large-scale structure}.
@@ -226,7 +227,7 @@ three-dimensional vector position:
 \quad ,
 \end{eqnarray}
 where $E[q]$ is the expectation value of $q$ (implicitly taken as an integral
-over all possible draws of the density field $\rho(x)$),
+over all possible draws of the density field $\rho(x)$ and over all space in each of those draws),
 $\rho$ is the density field,
 and $\bar{\rho}$ is the mean density.
 By assuming that $\xi(\cdot)$ depends only on $|r|$ we are effectively
@@ -249,13 +250,17 @@ covariance function) be positive everywhere; it can go negative!
 But it must be such that it always produces non-negative semi-definite
 covariance tensors.
 
-\textbf{Take-home message 1:} \emph{When we infer the correlation function
+\textbf{Take-home message 0:} \emph{When we infer the correlation function
 (what should be called the covariance function) of the density field,
 let's only consider functions that obey Mercer's condition!}
+(After all, we would never consider $V<0$ in the trivial problem!)
 This is much easier to do in Fourier space than real space.
 That isn't an argument for doing the \emph{analysis} in Fourier space,
 but it is an argument for representing the function $\xi(r)$ in
 Fourier space.
+HOGG: This point is slightly off-topic here, because in the context of the
+Bayesian inference, this will appear in the prior, not the likelihood,
+and up to now we have only been discussing the likelihood.
 
 Now, what, exactly is the Right Thing To Do in the trivial problem?
 It is very straightforward:
@@ -276,6 +281,12 @@ structure problem. It's hard!
 
 HOGG: Now set up priors and compare inferences using the true and pseudo LFs.
 We need to make a data set, and discuss how we choose / set $\Sigma$.
+
+\textbf{Take-home message 1:} \emph{The standard practice in
+  cosmology, even when applied to an extremely trivial problem,
+  delivers incorrect inferences.}
+
+
 
 HOGG: Introduce ABC and compare to the previous two inferences.
 
