@@ -10,6 +10,11 @@
 \documentclass[12pt, letterpaper, preprint]{aastex}
 \usepackage{hyperref}
 
+% typesetting shih
+\linespread{1.08} % close to 10/13 spacing
+\setlength{\parindent}{1.08\baselineskip} % Bringhurst
+\setlength{\parskip}{0ex}
+
 % math shih
 \newcommand{\setof}[1]{\left\{{#1}\right\}}
 \newcommand{\given}{\,|\,}
@@ -249,19 +254,18 @@ That this be true for any choice of points $\setof{x_i}$ is equivalent
 That is, there is no requirement that the correlation function (really
 covariance function) be positive everywhere; it can go negative!
 But it must be such that it always produces non-negative semi-definite
-covariance tensors.
-
-\textbf{Take-home message 0:} \emph{When we infer the correlation function
-(what should be called the covariance function) of the density field,
-let's only consider functions that obey Mercer's condition!}
-(After all, we would never consider $V<0$ in the trivial problem!)
-This is much easier to do in Fourier space than real space.
-That isn't an argument for doing the \emph{analysis} in Fourier space,
-but it is an argument for representing the function $\xi(r)$ in
-Fourier space.
-HOGG: This point is slightly off-topic here, because in the context of the
-Bayesian inference, this will appear in the prior, not the likelihood,
-and up to now we have only been discussing the likelihood.
+covariance tensors.\footnote{This has an important consequence for
+  inferences we do in cosmology: \emph{When we infer the correlation
+    function (what should be called the covariance function) of the
+    density field, let's only consider functions that obey Mercer's
+    condition!}  (After all, we would never consider $V<0$ in the
+  trivial problem!)  This is much easier to do in Fourier space than
+  real space.  That isn't an argument for doing the \emph{analysis} in
+  Fourier space, but it is an argument for representing the function
+  $\xi(r)$ in Fourier space. This is off-topic for the present
+  \documentname, of course, since this is a point about the
+  \emph{prior} and not about the \emph{likelihood}. But somehow it
+  feels relevant.}
 
 Now, what, exactly is the Right Thing To Do in the trivial problem?
 It is very straightforward:
@@ -287,13 +291,30 @@ We need to make a data set, and discuss how we choose / set $\Sigma$.
   cosmology, even when applied to an extremely trivial problem,
   delivers incorrect inferences.}
 
-
-
 HOGG: Introduce ABC and compare to the previous two inferences.
+
+\textbf{Take-home message 2:} \emph{If we use the pseudo-likelihood as
+  a distance function in ABC, we can get correct posterior inferences
+  without ever writing down a correct likelihood function.}
+HOGG: This might be tractable for LSS...
 
 HOGG: Return to the LSS problem and discuss three things: What the
 RTTD is. How, in detail, cosmologists get the $\Sigma$ horror. What
 ABC looks like. CITE HAHN AND VAKILI.
+
+HOGG: ABC IS JUST ONE OPTION; discuss other general kinds of options.
+They are vapor-ware!
+
+\textbf{Take-home message 3:} \emph{There are very likely to be
+  tractable versions of the ideas in this paper for large-scale
+  structure inferences.}
+Indeed, they might end up requiring less or comparable to current
+inferences with the pseudo-likelihood, for the simple reason that,
+right now, large numbers of simulations are required just to construct
+the covariance matrix $\Sigma$.
+HOGG: Check this...
+
+HOGG: Why might all this be tractable?
 
 \acknowledgements
 It is a pleasure to thank
