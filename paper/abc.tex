@@ -162,16 +162,17 @@ positions of all possible galaxies in the survey volume.\footnote{We
   believe that there might be a tractable likelihood function for at
   least some cosmological experiments. We are working on testing this
   now. HOGG CITE WANDELT and related.}
-What's done is to compare the empirical variance of the observed data
-to the variance observed in mock data or a simulation, and find
+What's done instead is to compare the empirical variance (the
+correlation function or the power spectrum) of the observed data to
+the variance observed in mock data or a simulation, and find
 parameters that generate simulations that generate similar observed
 variances.
-There is nothing wrong with this procedure in general.
-There are a large family of methods by which this comparison could be
-done that would generate correct inferences about the cosmological
+There is nothing wrong with this procedure in general.  There are a
+large family of methods by which this comparison could be performed
+that would generate correct inferences about the cosmological
 parameters.
-However, the cosmological community has not (generally) used a method
-that can be shown to generate correct inferences.
+However, the cosmological community has not (generally) used any of
+these methods.
 
 Now in this trivial problem---infer the variance $V$ given sampling
 $\setof{y_n}_{n=1}^N$---one approach one could take to developing full
@@ -181,7 +182,7 @@ is a sufficient statistic for the process variance $V$, \emph{make up}
 a \emph{pseudo-likelihood} $p_\pseudo(\sigma^2_y\given V)$ of the form
 \begin{eqnarray}
 \ln p_\pseudo(\sigma^2_y\given V) &=& -\frac{1}{2}\,\frac{[\sigma^2_y - V]^2}{\Sigma^2}
-\quad ,
+\label{eq:pseudo}\quad ,
 \end{eqnarray}
 where $\Sigma$ is a variance on the variance, determined somehow (to
 be discussed more below).
@@ -198,7 +199,7 @@ inference; the likelihood is based on \emph{beliefs} about the
 data-generation process; and the parameter $V$ of the pdf that
 generates the data is unknown (and, essentially, unknowable).
 
-This made-up pseudo-likelihood is patently absurd:
+This made-up pseudo-likelihood (\ref{eq:pseudo}) is patently absurd:
 For one, it does not represent anyone's beliefs about the data generation.
 For another, it has no pathology or odd behavior when the variance $V$
 goes to zero or negative!
@@ -297,9 +298,10 @@ HOGG: Introduce ABC and compare to the previous two inferences.
   without ever writing down a correct likelihood function.}
 HOGG: This might be tractable for LSS...
 
-HOGG: Return to the LSS problem and discuss three things: What the
-RTTD is. How, in detail, cosmologists get the $\Sigma$ horror. What
-ABC looks like. CITE HAHN AND VAKILI.
+HOGG: Return to the LSS problem and discuss four things things: What
+the RTTD is. What is the equivalent of the pseudo-likelihood
+(\ref{eq:pseudo})? How, in detail, cosmologists get the $\Sigma$
+horror. What ABC looks like. CITE HAHN AND VAKILI.
 
 HOGG: ABC IS JUST ONE OPTION; discuss other general kinds of options.
 They are vapor-ware!
