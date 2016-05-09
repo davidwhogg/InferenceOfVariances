@@ -18,6 +18,7 @@
 \newcommand{\setof}[1]{\left\{{#1}\right\}}
 \newcommand{\given}{\,|\,}
 \newcommand{\pseudo}{{\mathrm{pseudo}}}
+\newcommand{\Var}{\mathrm{Var}}
 
 % text shih
 \newcommand{\documentname}{note}
@@ -100,7 +101,7 @@ variance of the sampling
 \begin{eqnarray}
 \bar{y} &\equiv& \frac{1}{N}\,\sum_{n=1}^N y_n
 \label{eq:empmean}\\
-\sigma^2_y &\equiv& \frac{1}{N-1}\,\sum_{n=1}^N [y_n - \bar{y}]^2
+s^2_y &\equiv& \frac{1}{N-1}\,\sum_{n=1}^N [y_n - \bar{y}]^2
 \label{eq:empvar}
 \end{eqnarray}
 (with possibly some tiny adjustments) are good
@@ -177,11 +178,11 @@ these methods.
 Now in this trivial problem---infer the variance $V$ given sampling
 $\setof{y_n}_{n=1}^N$---one approach one could take to developing full
 posterior inferences about $V$ would be the following:
-Since the empirical variance $\sigma^2_y$ defined in (\ref{eq:empvar})
+Since the empirical variance $s^2_y$ defined in (\ref{eq:empvar})
 is a sufficient statistic for the process variance $V$, \emph{make up}
-a \emph{pseudo-likelihood} $p_\pseudo(\sigma^2_y\given V)$ of the form
+a \emph{pseudo-likelihood} $p_\pseudo(s^2_y\given V)$ of the form
 \begin{eqnarray}
-\ln p_\pseudo(\sigma^2_y\given V) &=& -\frac{1}{2}\,\frac{[\sigma^2_y - V]^2}{\Sigma^2}
+\ln p_\pseudo(s^2_y\given V) &=& -\frac{1}{2}\,\frac{[s^2_y - V]^2}{\Sigma^2}
 \label{eq:pseudo}\quad ,
 \end{eqnarray}
 where $\Sigma$ is a variance on the variance, determined somehow (to
@@ -191,7 +192,7 @@ created by an ansatz, and not by writing down our beliefs about the
 process by which the samples were generated.
 It gets the suffix ``likelihood'' because it is a (made up)
 probability for the data given parameters, where in this case
-$\sigma^2_y$ is a sufficient statistic of the data, and $V$ is a
+$s^2_y$ is a sufficient statistic of the data, and $V$ is a
 parameter of the unknown pdf from which the samples were drawn.
 Note the Bayesianism inherent here:
 The \emph{likelihood} is going to be the critical component of the
@@ -282,7 +283,7 @@ p(\setof{y_n}_{n=1}^N\given \mu,V) &=& -\frac{1}{2}\,\sum_{n=1}^N \frac{[y_n - \
 \end{eqnarray}
 which is obtained by taking the ln of a Gaussian function.
 It is left as an exercise to the reader to show that this likelihood
-can be expressed only in terms of the two sufficient statistics given
+can be expressed in terms of (only) the two sufficient statistics given
 in equations~(\ref{eq:empmean}) and (\ref{eq:empvar}).\footnote{Hint:
   Equation~(\ref{eq:truelf}) is quadratic in the data.}
 Below, we will discuss the Right Thing To Do in the large-scale
@@ -291,9 +292,24 @@ structure problem. It's hard!
 HOGG: Now set up priors and compare inferences using the true and pseudo LFs.
 We need to make a data set, and discuss how we choose / set $\Sigma$.
 
+HOGG: Mix this in:
+\begin{eqnarray}
+\Var[s^2_y] &=& \frac{2\,V^2}{N-1}
+\\
+\Sigma^2 &\leftarrow& \frac{2\,[s^2_y]^2}{N-1}
+\quad ,
+\end{eqnarray}
+where we are not being conservative because, for one, we are imagining
+that $s^2_y$ is a good estimator for $V$, and, for two, we are
+assuming implicitly that the true distribution has vanishing kurtosis
+(is nearly Gaussian).
+
 \textbf{Take-home message 1:} \emph{The standard practice in
   cosmology, even when applied to an extremely trivial problem,
   delivers incorrect inferences.}
+
+HOGG: Note that the wrongness of the inference doesn't depend on the
+wrongness of the choice of $\Sigma^2$. It is deeply wrong.
 
 HOGG: Introduce ABC and compare to the previous two inferences.
 
