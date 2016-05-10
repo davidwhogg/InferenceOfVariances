@@ -2,8 +2,11 @@
 % Copyright 2016 the author(s).
 
 % To-do
-% - get git hash in there!
 % - finish first draft.
+% - typeset projects properly (see acks)
+% - new AAS \software tags
+% - keywords
+% - get git hash in there!
 % - search for all occurrences of HOGG, DWH, or all-caps
 
 \documentclass[12pt, letterpaper, preprint]{aastex}
@@ -21,6 +24,8 @@
 \newcommand{\Var}{\mathrm{Var}}
 
 % text shih
+\newcommand{\foreign}[1]{\textsl{#1}}
+\newcommand{\etal}{\foreign{et~al.}}
 \newcommand{\documentname}{note}
 \newcommand{\equationname}{equation}
 
@@ -342,8 +347,17 @@ It is a pleasure to thank
   Brendon~J.~Brewer (Auckland),
   Chang~Hoon~Hahn (NYU),
   Dan~Foreman-Mackey (UW),
+  Jeremy~Tinker (NYU),
   M.~J.~Vakili (NYU),
   and the Blanton--Hogg group meeting at NYU
 for valuable discussions.
+This work was supported by the NSF (HOGG) and NASA (HOGG).
+This project made use of the NASA Astrophysics Data System
+and open-source software Python, numpy, and matplotlib.
+
+\begin{thebibliography}{24}\raggedright
+\bibitem[Percival \etal(2014)]{percival} Percival, W.~J.,
+  Ross, A.~J., S{\'a}nchez, A.~G., \etal., 2014, \mnras, 439, 2531
+\end{thebibliography}
 
 \end{document}
