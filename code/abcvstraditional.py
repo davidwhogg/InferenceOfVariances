@@ -15,12 +15,9 @@ from corner import corner
 def make_fake_data(N):
     return hoggdraw(Truth, N)
 
-def ln_pseudo_likelihood(stats, pars, variances):
-    empiricalmean, empiricalvar = stats
+def ln_pseudo_likelihood(empiricalvar, pars, varvar):
     mean, var = pars
-    meanvar, varvar = variances
-    return (-0.5 * (empiricalmean - mean) ** 2 / meanvar +
-            -0.5 * (empiricalvar  - var ) ** 2 / varvar)
+    return (-0.5 * (empiricalvar - var ) ** 2 / varvar)
 
 def ln_correct_likelihood(data, pars):
     mean, var = pars
@@ -38,11 +35,11 @@ def ln_prior(pars):
         return -np.Inf
     return 0.
 
-def ln_pseudo_posterior(pars, stats, variances):
+def ln_pseudo_posterior(pars, empiricalvar, varvar):
     lnp = ln_prior(pars)
     if not np.isfinite(lnp):
         return -np.Inf
-    return lnp + ln_pseudo_likelihood(stats, pars, variances)
+    return lnp + ln_pseudo_likelihood(empiricalvar, pars, varvar)
 
 def ln_correct_posterior(pars, data):
     lnp = ln_prior(pars)
@@ -69,54 +66,62 @@ def mcmc(pars0, lnp, nsteps, args):
 def hoggdraw(stats, N):
     return stats[0] + np.sqrt(stats[1]) * np.random.normal(size=N)
 
-def hoggvar(data, mean):
-    return np.sum((data - mean) ** 2) / (len(data) - 1)
+def hoggvar(data):
+    mean = np.mean(data)
+    return np.sum((data - mean) ** 2) / float(len(data) - 1)
 
 def main(N, prior_samples=None):
+    np.random.seed(17)
     Nstr = "{:04d}".format(N)
 
     print("main: making fake data")
-    np.random.seed(23)
     data = make_fake_data(N)
     empiricalmean = np.mean(data)
-    empiricalvar = hoggvar(data, empiricalmean)
+    empiricalvar = hoggvar(data)
     stats = np.array([empiricalmean, empiricalvar])
     print(data, stats)
 
+    print("main: making LaTeX input file")
+    lfn = "./data_{}.tex".format(Nstr)
+    fd = open(lfn, "w")
+    fd.write("% this file was made by abcvstraditional.py\n")
+    fd.write(r"\newcommand{\samples}{")
+    for n in range(N):
+        fd.write("{:.2f}".format(data[n]))
+        if n < (N - 1):
+            fd.write(r", ")
+    fd.write("}\n")
+    fd.write(r"\newcommand{\samplemean}{")
+    fd.write("{:.2f}".format(empiricalmean))
+    fd.write("}\n")
+    fd.write(r"\newcommand{\samplevar}{")
+    fd.write("{:.2f}".format(empiricalvar))
+    fd.write("}\n")
+    fd.close()
+    print(lfn)
+
     print("main: running correct MCMC")
     pars0 = Truth
-    correct_mcmc_samples = mcmc(pars0, ln_correct_posterior, 2 ** 16, (data, ))
+    Tbig = 2 ** 19
+    correct_mcmc_samples = mcmc(pars0, ln_correct_posterior, Tbig, (data, ))
     accept = correct_mcmc_samples[1:] == correct_mcmc_samples[:-1]
     print("acceptance ratio", np.mean(accept))
-    thinfactor = 8
+    thinfactor = 2 ** 4
     correct_mcmc_samples = correct_mcmc_samples[::thinfactor] # thin
     print(correct_mcmc_samples)
 
     print("main: plotting correct posterior samples")
     labels = ["mean", "var"]
     ranges = [prior_info[0:2], prior_info[2:4]]
-    fig = corner(correct_mcmc_samples, bins=128, labels=labels, range=ranges)
+    fig = corner(correct_mcmc_samples, bins=64, labels=labels, range=ranges)
     pfn = "./correct_{}.png".format(Nstr)
     fig.savefig(pfn)
     print(pfn)
 
-    print("main: computing meanvar and varvar")
-    M = 2 ** 16
-    print(N, M)
-    means = np.zeros(M)
-    vars = np.zeros(M)
-    for m in range(M):
-        foo = hoggdraw(stats, N)
-        em = np.mean(foo)
-        ev = hoggvar(foo, em)
-        means[m] = em
-        vars[m] = ev
-    variances = np.array([np.var(means), np.var(vars)])
-    print(variances)
-
     print("main: running pseudo MCMC")
     pars0 = Truth
-    pseudo_mcmc_samples = mcmc(pars0, ln_pseudo_posterior, 2 ** 16, (stats, variances, ))
+    varvar = 2. * empiricalvar * empiricalvar / float(N - 1)
+    pseudo_mcmc_samples = mcmc(pars0, ln_pseudo_posterior, Tbig, (empiricalvar, varvar, ))
     accept = pseudo_mcmc_samples[1:] == pseudo_mcmc_samples[:-1]
     print("acceptance ratio", np.mean(accept))
     pseudo_mcmc_samples = pseudo_mcmc_samples[::thinfactor] # thin
@@ -127,6 +132,8 @@ def main(N, prior_samples=None):
     pfn = "./pseudo_{}.png".format(Nstr)
     fig.savefig(pfn)
     print(pfn)
+
+    assert False
 
     if prior_samples is None:
         print("main: getting prior samples (this might take a while)")

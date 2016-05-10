@@ -9,7 +9,8 @@
 
 \documentclass[12pt, letterpaper, preprint]{aastex}
 \usepackage{hyperref}
-\include{vc}
+\input{vc}
+\input{../code/data_0005}
 
 % typesetting shih
 \linespread{1.08} % close to 10/13 spacing
@@ -187,7 +188,7 @@ over all possible experimental outcomes, which means all possible
 positions of all possible galaxies in the survey volume.\footnote{We
   believe that there might be a tractable likelihood function for at
   least some cosmological experiments. We are working on testing this
-  now. HOGG CITE WANDELT and related.}
+  now. (Don't hold your breath.)}
 What's done instead is to compare the empirical variance (the
 correlation function or the power spectrum) of the observed data to
 the variance observed in mock data or a simulation, and find
@@ -318,7 +319,7 @@ In order to test these ideas quantitatively, we need fake data.
 Here we choose (arbitrarily) a True\footnote{Because we are making
   fake data, we have access to God's Truth (with a capital
   ``T''). This is not the case for real astronomical measurements!}
-mean $\mu=7.0$ and variance $V=17.0$ (units arbitrary).
+mean $\mu=7.0$ and True variance $V=17.0$ (units arbitrary).
 With code associated with this \documentname\footnote{The calculations
   and \figurename s in this \documentname\ were generated from the code in
   repository \giturl\ (with hash \texttt{\githash~\gitdate}). You can
@@ -326,15 +327,18 @@ With code associated with this \documentname\footnote{The calculations
 $y_n$.
 These samples (and their empirical moments are
 \begin{eqnarray}
-\setof{y_n}_{n=1}^N &=& \setof{HOGG}
+\setof{y_n}_{n=1}^N &=& \setof{\samples}
 \\
-\bar{y} &=& HOGG
+\bar{y} &=& \samplemean
 \\
-s^2_y &=& HOGG
+s^2_y &=& \samplevar
 \quad .
 \end{eqnarray}
 
-HOGG: Now set up priors and compare inferences using the true and pseudo LFs.
+Now imagine (without questioning) that our prior pdf for the
+parameters $\mu, V$ are uniform in the intervals $0<\mu<10$ and
+$0<V<100$.
+We have two options for inference: Use the 
 
 The pseudo-likelihood (\ref{eq:pseudo}) requires the setting of the
 variance-of-variance parameter $\Sigma^2$.
