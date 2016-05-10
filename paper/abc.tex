@@ -16,6 +16,15 @@
 \linespread{1.08} % close to 10/13 spacing
 \setlength{\parindent}{1.08\baselineskip} % Bringhurst
 \setlength{\parskip}{0ex}
+\let\oldbibliography\thebibliography % killin' me.
+\renewcommand{\thebibliography}[1]{%
+  \oldbibliography{#1}%
+  \setlength{\itemsep}{0pt}%
+  \setlength{\parsep}{0pt}%
+  \setlength{\parskip}{0pt}%
+  \setlength{\bibsep}{0ex}
+  \raggedright
+}
 
 % math shih
 \newcommand{\setof}[1]{\left\{{#1}\right\}}
@@ -378,9 +387,11 @@ This work was supported by the NSF (HOGG) and NASA (HOGG).
 This project made use of the NASA Astrophysics Data System
 and open-source software Python, numpy, and matplotlib.
 
-\begin{thebibliography}{24}\raggedright
-\bibitem[Percival \etal(2014)]{percival} Percival, W.~J.,
-  Ross, A.~J., S{\'a}nchez, A.~G., \etal., 2014, \mnras, 439, 2531
+\begin{thebibliography}{24}
+\bibitem[Eisenstein \etal(2005)]{eisenstein}
+  Eisenstein, D.~J., Zehavi, I., Hogg, D.~W., \etal, 2005, \apj, 633, 560 
+\bibitem[Percival \etal(2014)]{percival}
+  Percival, W.~J., Ross, A.~J., S{\'a}nchez, A.~G., \etal, 2014, \mnras, 439, 2531
 \end{thebibliography}
 
 \end{document}
