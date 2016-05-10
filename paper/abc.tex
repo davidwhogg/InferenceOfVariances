@@ -101,11 +101,11 @@ inferences.
 
 Imagine \emph{the most trivial variance estimation problem possible}:
 You have been given $N$ samples $y_n$ drawn fairly and independently (iid)
-from a Gaussain pdf.
+from a Gaussian probability density function (hereafter ``pdf'').
 What is the mean $\mu$ and variance $V$ of the pdf from which they
 were drawn?
 There is a classical answer that the empirial mean and empirical
-variance of the sampling
+variance (or sample mean and sample variance) of the sampling
 \begin{eqnarray}
 \bar{y} &\equiv& \frac{1}{N}\,\sum_{n=1}^N y_n
 \label{eq:empmean}\\
@@ -297,13 +297,27 @@ in equations~(\ref{eq:empmean}) and (\ref{eq:empvar}).\footnote{Hint:
 Below, we will discuss the Right Thing To Do in the large-scale
 structure problem. It's hard!
 
-HOGG: Now set up priors and compare inferences using the true and pseudo LFs.
-We need to make a data set, and discuss how we choose / set $\Sigma$.
+HOGG: Now generate fake data, and give a table (and code).
 
-HOGG: Mix this in:
+HOGG: Now set up priors and compare inferences using the true and pseudo LFs.
+
+The pseudo-likelihood (\ref{eq:pseudo}) requires the setting of the
+variance-of-variance parameter $\Sigma^2$.
+To set this, we make use of theory\footnote{\url{https://en.wikipedia.org/wiki/Variance}}
+about the variance $\Var[s^2_y]$ of
+the empirical sample variance $s^2_y$.
+\begin{eqnarray}
+\Var[s^2_y] &=& \frac{1}{N}\,\left[\mu_4 - \frac{N-3}{N-1}\,V^2\right]
+\quad ,
+\end{eqnarray}
+where $\mu_4$ is the (true, not estimated) fourth moment of the pdf $p(y)$.
+For a Gaussian pdf this becomes
 \begin{eqnarray}
 \Var[s^2_y] &=& \frac{2\,V^2}{N-1}
-\\
+\quad .
+\end{eqnarray}
+For these reasons, we set the pseudo-likelihood parameter $\Sigma^2$ to
+\begin{eqnarray}
 \Sigma^2 &\leftarrow& \frac{2\,[s^2_y]^2}{N-1}
 \quad ,
 \end{eqnarray}
@@ -311,6 +325,12 @@ where we are not being conservative because, for one, we are imagining
 that $s^2_y$ is a good estimator for $V$, and, for two, we are
 assuming implicitly that the true distribution has vanishing kurtosis
 (is nearly Gaussian).
+Although this choice is not conservative, it maps directly onto the
+practice in large-scale structure studies, which is to set the
+equivalent parameter using simulations of the data-generating process
+with parameters set to something estimated from the data.
+That is, the pseudo-likelihoods used in cosmology are not conservative
+in exactly this sense.
 
 \textbf{Take-home message 1:} \emph{The standard practice in
   cosmology, even when applied to an extremely trivial problem,
