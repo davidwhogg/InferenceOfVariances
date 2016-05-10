@@ -164,5 +164,5 @@ if __name__ == "__main__":
     stepsizes = np.array([2., 2.])
 
     prior_samples = None
-    for N in [5, 23, 87, 167]:
+    for N in [5, ]:
         prior_samples = main(N, prior_samples=prior_samples)

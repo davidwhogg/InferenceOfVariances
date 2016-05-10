@@ -5,12 +5,11 @@
 % - finish first draft.
 % - typeset projects properly (see acks)
 % - new AAS \software tags
-% - keywords
-% - get git hash in there!
 % - search for all occurrences of HOGG, DWH, or all-caps
 
 \documentclass[12pt, letterpaper, preprint]{aastex}
 \usepackage{hyperref}
+\include{vc}
 
 % typesetting shih
 \linespread{1.08} % close to 10/13 spacing
@@ -25,6 +24,7 @@
   \setlength{\bibsep}{0ex}
   \raggedright
 }
+\setlength{\footnotesep}{0ex} % seriously?
 
 % math shih
 \newcommand{\setof}[1]{\left\{{#1}\right\}}
@@ -35,7 +35,7 @@
 % text shih
 \newcommand{\foreign}[1]{\textsl{#1}}
 \newcommand{\etal}{\foreign{et~al.}}
-\newcommand{\documentname}{note}
+\newcommand{\documentname}{\textsl{Article}}
 \newcommand{\equationname}{equation}
 
 \begin{document}\sloppy\sloppypar\frenchspacing % oh yeah
@@ -83,9 +83,17 @@ the pseudo-likelihood method.
 \end{abstract}
 
 \keywords{
-foo
+methods: data analysis
 ---
-bar
+methods: statistical
+---
+galaxies: statistics
+---
+cosmological parameters
+---
+cosmology: observations
+---
+large-scale structure of universe
 }
 
 Present-day large-scale structure experiments are fundamentally
@@ -124,7 +132,7 @@ s^2_y &\equiv& \frac{1}{N-1}\,\sum_{n=1}^N [y_n - \bar{y}]^2
 (with possibly some tiny adjustments) are good
 \emph{estimators}\footnote{There is a little bit of confusion in the
   cosmological literature between the variance of a distribution and
-  the empirical variance of a sampling of that distribution. In this
+  the \emph{empirical variance of a sampling} of that distribution. In this
   \documentname, the \emph{mean} and \emph{variance} are properties of
   the pdf from which the data were generated. The \emph{empirical
     mean} and the \emph{empirical variance} are things you get by
@@ -134,7 +142,7 @@ s^2_y &\equiv& \frac{1}{N-1}\,\sum_{n=1}^N [y_n - \bar{y}]^2
   statements or implications that the cosmological parameters are
   being inferred from the variance of the density field. They are not!
   They are being inferred from an \emph{empirical estimate} of the
-  variance of the density field. And while these empirical estimates
+  variance of the density field---a sample variance. And while these empirical estimates
   will be sufficient statistics for the variance,
   this is only relevant and valuable if
   they are used \emph{correctly}.} for the mean and variance of the
@@ -202,7 +210,7 @@ a \emph{pseudo-likelihood} $p_\pseudo(s^2_y\given V)$ of the form
 \ln p_\pseudo(s^2_y\given V) &=& -\frac{1}{2}\,\frac{[s^2_y - V]^2}{\Sigma^2}
 \label{eq:pseudo}\quad ,
 \end{eqnarray}
-where $\Sigma$ is a variance on the variance, determined somehow (to
+where $\Sigma^2$ is a variance on the variance, determined somehow (to
 be discussed more below).
 This pseudo-likelihood gets the prefix ``pseudo'' because it was
 created by an ansatz, and not by writing down our beliefs about the
@@ -306,7 +314,25 @@ in equations~(\ref{eq:empmean}) and (\ref{eq:empvar}).\footnote{Hint:
 Below, we will discuss the Right Thing To Do in the large-scale
 structure problem. It's hard!
 
-HOGG: Now generate fake data, and give a table (and code).
+In order to test these ideas quantitatively, we need fake data.
+Here we choose (arbitrarily) a True\footnote{Because we are making
+  fake data, we have access to God's Truth (with a capital
+  ``T''). This is not the case for real astronomical measurements!}
+mean $\mu=7.0$ and variance $V=17.0$ (units arbitrary).
+With code associated with this \documentname\footnote{The calculations
+  and \figurename s in this \documentname\ were generated from the code in
+  repository \giturl\ (with hash \texttt{\githash~\gitdate}). You can
+  clone this and run the code yourself!}, we generate $N=5$ samples
+$y_n$.
+These samples (and their empirical moments are
+\begin{eqnarray}
+\setof{y_n}_{n=1}^N &=& \setof{HOGG}
+\\
+\bar{y} &=& HOGG
+\\
+s^2_y &=& HOGG
+\quad .
+\end{eqnarray}
 
 HOGG: Now set up priors and compare inferences using the true and pseudo LFs.
 
