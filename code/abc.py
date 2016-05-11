@@ -84,7 +84,7 @@ def main(N, prior_samples=None):
     print("main: making LaTeX input file")
     lfn = "./data_{}.tex".format(Nstr)
     fd = open(lfn, "w")
-    fd.write("% this file was made by abcvstraditional.py\n")
+    fd.write("% this file was made by abc.py\n")
     fd.write(r"\newcommand{\samples}{")
     for n in range(N):
         fd.write("{:.2f}".format(data[n]))
@@ -111,9 +111,10 @@ def main(N, prior_samples=None):
     print(correct_mcmc_samples)
 
     print("main: plotting correct posterior samples")
-    labels = ["mean", "var"]
+    labels = [r"mean $\mu$", r"variance $V$"]
     ranges = [prior_info[0:2], prior_info[2:4]]
-    fig = corner(correct_mcmc_samples, bins=64, labels=labels, range=ranges)
+    bins = 32
+    fig = corner(correct_mcmc_samples, bins=bins, labels=labels, range=ranges)
     pfn = "./correct_{}.png".format(Nstr)
     fig.savefig(pfn)
     print(pfn)
@@ -128,7 +129,7 @@ def main(N, prior_samples=None):
     print(pseudo_mcmc_samples.shape, pseudo_mcmc_samples)
 
     print("main: plotting pseudo posterior samples")
-    fig = corner(pseudo_mcmc_samples, bins=128, labels=labels, range=ranges)
+    fig = corner(pseudo_mcmc_samples, bins=bins, labels=labels, range=ranges)
     pfn = "./pseudo_{}.png".format(Nstr)
     fig.savefig(pfn)
     print(pfn)
