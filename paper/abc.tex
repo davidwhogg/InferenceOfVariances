@@ -11,7 +11,7 @@
 \documentclass[12pt, letterpaper, preprint]{aastex}
 \usepackage{hyperref}
 \input{vc}
-\input{../code/data_0005}
+\input{data_0005}
 
 % typesetting shih
 \linespread{1.08} % close to 10/13 spacing
@@ -37,6 +37,7 @@
 % text shih
 \newcommand{\foreign}[1]{\textsl{#1}}
 \newcommand{\etal}{\foreign{et~al.}}
+\newcommand{\opcit}{\foreign{op~cit.}}
 \newcommand{\documentname}{\textsl{Article}}
 \newcommand{\equationname}{equation}
 
@@ -339,11 +340,49 @@ s^2_y &=& \samplevar
 Now imagine (without questioning) that our prior pdf for the
 parameters $\mu, V$ are uniform in the intervals $0<\mu<10$ and
 $0<V<100$.
-We have two options for inference: Use the 
+At this stage, we have two options for inference: Use the correct
+likelihood (\ref{eq:truelf}) or else the pseudo-likelihood
+(\ref{eq:pseudo}).
+We do both, running a standard (but home-built) Metropolis--Hastings
+MCMC code for $524288$ steps, and thinning the chain by a factor of
+$16$.
+A Gaussian in each parameter $\mu,V$ was employed as a proposal
+distribution, and step sizes were set to give reasonable acceptance.
+The details are all visible in the code\footnote{\opcit} associated
+with this \documentname.
+The results are shown in \figurename~\ref{fig:correct} and
+\figurename~\ref{fig:pseudo}.%
+\begin{figure}
+\includegraphics{correct_0005.png}
+\caption{HOGG Foo.\label{fig:correct}}
+\end{figure}%
+\begin{figure}
+\includegraphics{pseudo_0005.png}
+\caption{Same as \figurename~\ref{fig:correct} but with the likelihood
+  replaced with the pseudo-likelihood (\ref{eq:pseudo}). The
+  pseudo-likelihood does not involve the mean $\mu$, so it remains
+  unconstrained and the marginalized posterior pdf matches the prior
+  pdf for this parameter. The posterior on the variance $V$ looks very
+  different from the correct answer shown in
+  \figurename~\ref{fig:correct}.\label{fig:pseudo}}
+\end{figure}
 
-The pseudo-likelihood (\ref{eq:pseudo}) requires the setting of the
-variance-of-variance parameter $\Sigma^2$.
-To set this, we make use of theory\footnote{\url{https://en.wikipedia.org/wiki/Variance}}
+Two comments on these results:
+First, the two inferences deliver very different results for the
+variance $V$. This is the most important point.
+In the pseudo-likelihood inference (\figurename~\ref{fig:pseudo}), the
+pdf mean $\mu$ is unconstrained. This is because $\mu$ doesn't appear
+at all in the pseudo-likelihood! But the key point is that the
+posterior inferences about $V$ are very different, especially at very
+small and very large values of $V$.
+
+\textbf{Take-home message 1:} \emph{The standard practice in
+  cosmology, even when applied to an extremely trivial problem,
+  delivers incorrect inferences.}
+
+Second, the use of the pseudo-likelihood (\ref{eq:pseudo}) required
+the setting of the variance-of-variance parameter $\Sigma^2$.
+To set this, we made use of theory\footnote{\url{https://en.wikipedia.org/wiki/Variance}}
 about the variance $\Var[s^2_y]$ of
 the empirical sample variance $s^2_y$.
 \begin{eqnarray}
@@ -376,15 +415,6 @@ could make for $\Sigma^2$ such that our posterior inferences would e
 correct given this form for the pseudo-likelihood; that is, the method
 is not wrong because it is not conservative. It is wrong because it
 is using an unreasonable likelihood function.
-
-HOGG: RESULTS
-
-\textbf{Take-home message 1:} \emph{The standard practice in
-  cosmology, even when applied to an extremely trivial problem,
-  delivers incorrect inferences.}
-
-HOGG: Note that the wrongness of the inference doesn't depend on the
-wrongness of the choice of $\Sigma^2$. It is deeply wrong.
 
 HOGG: Introduce ABC and compare to the previous two inferences.
 
