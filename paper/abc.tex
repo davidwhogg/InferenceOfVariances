@@ -4,7 +4,6 @@
 % To-do
 % - be more specific about HOW the posterior is wrong.
 % - add in material about sigma_8 being biased low!!
-% - fix words about ``using the pseudo-likelihood'' as a distance function -- something LIKE it.
 % - include the ABC description and results.
 % - finish first draft.
 % - cite Percival and Eisenstein. Be self-deprecating.
@@ -73,8 +72,8 @@ from a simulation or theory.
 Here we show---with toy problems---that this procedure in general
 produces incorrect posterior inferences about the variance (and
 therefore cosmological parameters).
-However, we also show that if the same pseudo-likelihood
-(or even something simpler) is used
+However, we also show that if a very similar pseudo-likelihood
+is used
 \emph{not} as a likelihood in a standard probabilistic inference but
 rather as a \emph{distance metric} in a likelihood-free inference or
 approximate Bayesian
@@ -379,6 +378,11 @@ pdf mean $\mu$ is unconstrained. This is because $\mu$ doesn't appear
 at all in the pseudo-likelihood! But the key point is that the
 posterior inferences about $V$ are very different, especially at very
 small and very large values of $V$.
+In particular, the pseudo-likelihood permits low variances that ought
+to be (truly) ruled out, and rules out high variances that are (truly)
+permitted. This might mean that large-scale structure projects using
+analogous methods might be biased low in power-spectrum amplitude
+parameters like $\sigma_8$.
 
 \textbf{Take-home message 1:} \emph{The standard practice in
   cosmology, even when applied to an extremely trivial problem,
@@ -421,8 +425,22 @@ is not wrong because it is not conservative. It is wrong because it
 is using an unreasonable likelihood function.
 
 HOGG: Introduce ABC and compare to the previous two inferences.
+Note that you have to simulate the data and compare.
 
-\textbf{Take-home message 2:} \emph{If we use the pseudo-likelihood as
+\begin{figure}
+\includegraphics{abc_0005_-4.png}
+\caption{Same as \figurename~\ref{fig:correct} but now with the output
+  of the likelihood-free inference or ABC. Like in
+  \figurename~\ref{fig:pseudo}, the ABC distance metric does not
+  involve the mean $\mu$, so it remains unconstrained and the
+  marginalized posterior pdf matches the prior pdf for this
+  parameter. The posterior on the variance $V$ looks very similar to
+  the correct answer shown in \figurename~\ref{fig:correct}. This
+  demonstrates that ABC can be used to draw correct
+  inferences.\label{fig:abc}}
+\end{figure}
+
+\textbf{Take-home message 2:} \emph{If we use a variant of the pseudo-likelihood as
   a distance function in ABC, we can get correct posterior inferences
   without ever writing down a correct likelihood function.}
 HOGG: This might be tractable for LSS...
