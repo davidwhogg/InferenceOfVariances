@@ -15,14 +15,6 @@ from corner import corner
 def make_fake_data(N):
     return hoggdraw(Truth, N)
 
-def ln_pseudo_likelihood(empiricalvar, pars, varvar):
-    mean, var = pars
-    return (-0.5 * (empiricalvar - var ) ** 2 / varvar)
-
-def ln_correct_likelihood(data, pars):
-    mean, var = pars
-    return np.sum(-0.5 * (data - mean) ** 2 / var) - (0.5 * len(data) * np.log(var))
-
 def ln_prior(pars):
     mean, var = pars
     if mean < prior_info[0]:
@@ -35,17 +27,36 @@ def ln_prior(pars):
         return -np.Inf
     return 0.
 
-def ln_pseudo_posterior(pars, empiricalvar, varvar):
-    lnp = ln_prior(pars)
-    if not np.isfinite(lnp):
-        return -np.Inf
-    return lnp + ln_pseudo_likelihood(empiricalvar, pars, varvar)
+def ln_correct_likelihood(data, pars):
+    mean, var = pars
+    return np.sum(-0.5 * (data - mean) ** 2 / var) - (0.5 * len(data) * np.log(var))
 
 def ln_correct_posterior(pars, data):
     lnp = ln_prior(pars)
     if not np.isfinite(lnp):
         return -np.Inf
     return lnp + ln_correct_likelihood(data, pars)
+
+def ln_pseudo_likelihood(empiricalvar, pars, varvar):
+    mean, var = pars
+    return (-0.5 * (empiricalvar - var ) ** 2 / varvar)
+
+def ln_pseudo_posterior(pars, empiricalvar, varvar):
+    lnp = ln_prior(pars)
+    if not np.isfinite(lnp):
+        return -np.Inf
+    return lnp + ln_pseudo_likelihood(empiricalvar, pars, varvar)
+
+def ln_abc_function(pars, empiricalvar, varvar, N, threshold):
+    lnp = ln_prior(pars)
+    if not np.isfinite(lnp):
+        return -np.Inf
+    mean, var = pars
+    thisdata = mean + np.sqrt(var) * np.random.normal(size=N)
+    thispars = [mean, hoggvar(thisdata)]
+    if ln_pseudo_likelihood(empiricalvar, thispars, varvar) < -0.5 * threshold: # NEGATIVE 0.5
+        return -np.Inf
+    return lnp
 
 def mcmc_step(pars, lnpvalue, lnp, args):
     newpars = pars + stepsizes * np.random.normal(size=len(pars))
@@ -54,9 +65,12 @@ def mcmc_step(pars, lnpvalue, lnp, args):
         return newpars, newlnpvalue
     return pars.copy(), lnpvalue
 
-def mcmc(pars0, lnp, nsteps, args):
+def mcmc(pars0, lnp, nsteps, args, abc=False):
     pars = pars0.copy()
-    lnpvalue = lnp(pars, *args)
+    if abc:
+        lnpvalue = ln_prior(pars)
+    else: 
+        lnpvalue = lnp(pars, *args)
     parss = np.zeros((nsteps, len(pars)))
     for k in range(nsteps):
         pars, lnpvalue = mcmc_step(pars, lnpvalue, lnp, args)
@@ -70,7 +84,7 @@ def hoggvar(data):
     mean = np.mean(data)
     return np.sum((data - mean) ** 2) / float(len(data) - 1)
 
-def main(N, prior_samples=None):
+def main(N):
     np.random.seed(42)
     Nstr = "{:04d}".format(N)
 
@@ -100,33 +114,52 @@ def main(N, prior_samples=None):
     fd.close()
     print(lfn)
 
-    print("main: running correct MCMC")
-    pars0 = Truth
+    # MCMC sampling and plotting shared parameters
+    pars0 = Truth.copy()
     Tbig = 2 ** 19
-    correct_mcmc_samples = mcmc(pars0, ln_correct_posterior, Tbig, (data, ))
-    accept = correct_mcmc_samples[1:] == correct_mcmc_samples[:-1]
-    print("acceptance ratio", np.mean(accept))
     thinfactor = 2 ** 4
-    correct_mcmc_samples = correct_mcmc_samples[::thinfactor] # thin
-    print(correct_mcmc_samples)
-
-    print("main: plotting correct posterior samples")
+    varvar = 2. * empiricalvar * empiricalvar / float(N - 1)
+    bins = 32
     labels = [r"mean $\mu$", r"variance $V$"]
     ranges = [prior_info[0:2], prior_info[2:4]]
-    bins = 32
+
+    print("main: running ABC (this might take a while)")
+    for log2thresh in [-4, ]:
+        thresh = 2. ** log2thresh
+        print("working on threshold", thresh)
+        abc_mcmc_samples = mcmc(pars0, ln_abc_function, 2*Tbig, (empiricalvar, varvar, N, thresh), abc=True)
+        accept = abc_mcmc_samples[1:] != abc_mcmc_samples[:-1]
+        print("acceptance ratio", np.mean(accept))
+        abc_mcmc_samples = abc_mcmc_samples[::thinfactor*2] # thin
+        print(abc_mcmc_samples.shape)
+
+        print("main: plotting ABC posterior samples")
+        fig = corner(abc_mcmc_samples, bins=bins, labels=labels, range=ranges)
+        pfn = "./abc_{}_{}.png".format(Nstr, log2thresh)
+        fig.savefig(pfn)
+        print(pfn)
+
+    assert False
+
+    print("main: running correct MCMC")
+    correct_mcmc_samples = mcmc(pars0, ln_correct_posterior, Tbig, (data, ))
+    accept = correct_mcmc_samples[1:] != correct_mcmc_samples[:-1]
+    print("acceptance ratio", np.mean(accept))
+    correct_mcmc_samples = correct_mcmc_samples[::thinfactor] # thin
+    print(correct_mcmc_samples.shape)
+
+    print("main: plotting correct posterior samples")
     fig = corner(correct_mcmc_samples, bins=bins, labels=labels, range=ranges)
     pfn = "./correct_{}.png".format(Nstr)
     fig.savefig(pfn)
     print(pfn)
 
     print("main: running pseudo MCMC")
-    pars0 = Truth
-    varvar = 2. * empiricalvar * empiricalvar / float(N - 1)
     pseudo_mcmc_samples = mcmc(pars0, ln_pseudo_posterior, Tbig, (empiricalvar, varvar, ))
-    accept = pseudo_mcmc_samples[1:] == pseudo_mcmc_samples[:-1]
+    accept = pseudo_mcmc_samples[1:] != pseudo_mcmc_samples[:-1]
     print("acceptance ratio", np.mean(accept))
     pseudo_mcmc_samples = pseudo_mcmc_samples[::thinfactor] # thin
-    print(pseudo_mcmc_samples.shape, pseudo_mcmc_samples)
+    print(pseudo_mcmc_samples.shape)
 
     print("main: plotting pseudo posterior samples")
     fig = corner(pseudo_mcmc_samples, bins=bins, labels=labels, range=ranges)
@@ -134,43 +167,12 @@ def main(N, prior_samples=None):
     fig.savefig(pfn)
     print(pfn)
 
-    assert False
-
-    if prior_samples is None:
-        print("main: getting prior samples (this might take a while)")
-        pars0 = Truth
-        prior_samples = mcmc(pars0, ln_prior, 2 ** 23, ())
-        accept = prior_samples[1:] == prior_samples[:-1]
-        print("acceptance ratio", np.mean(accept))
-        print(prior_samples.shape, prior_samples)
-
-    print("main: running ABC censoring (this might take a while)")
-    squared_distances = np.zeros(len(prior_samples))
-    for i, pars in enumerate(prior_samples):
-        data = hoggdraw(pars, N)
-        mean = np.mean(data)
-        squared_distances[i] = -2. * ln_pseudo_posterior([mean, hoggvar(data, mean)], stats, variances)
-    percentile = 100. * len(correct_mcmc_samples) / len(prior_samples)
-    threshold = np.percentile(squared_distances, percentile)
-    abc_samples = prior_samples[squared_distances < threshold]
-    print("threshold", threshold)
-    print(abc_samples.shape, abc_samples)
-
-    print("main: plotting ABC samples")
-    fig = corner(abc_samples, bins=128, labels=labels, range=ranges)
-    pfn = "./abc_{}.png".format(Nstr)
-    fig.savefig(pfn)
-    print(pfn)
-
-    return prior_samples
-
 if __name__ == "__main__":
 
     # setting TRUTHs
     Truth = np.array([7., 17.]) # mean, variance
     prior_info = np.array([0., 10., 0., 100.]) # min and max of mean and variance priors
-    stepsizes = np.array([2., 2.])
+    stepsizes = np.array([4., 4.])
 
-    prior_samples = None
-    for N in [5, ]:
-        prior_samples = main(N, prior_samples=prior_samples)
+    N = 5
+    main(N)
