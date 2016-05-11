@@ -84,7 +84,7 @@ def main(N, prior_samples=None):
     print("main: making LaTeX input file")
     lfn = "./data_{}.tex".format(Nstr)
     fd = open(lfn, "w")
-    fd.write("% this file was made by abc.py\n")
+    fd.write("% this file was created by abc.py\n")
     fd.write(r"\newcommand{\samples}{")
     for n in range(N):
         fd.write("{:.2f}".format(data[n]))
