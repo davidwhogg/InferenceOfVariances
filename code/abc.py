@@ -71,7 +71,7 @@ def hoggvar(data):
     return np.sum((data - mean) ** 2) / float(len(data) - 1)
 
 def main(N, prior_samples=None):
-    np.random.seed(17)
+    np.random.seed(42)
     Nstr = "{:04d}".format(N)
 
     print("main: making fake data")
