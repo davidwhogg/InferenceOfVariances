@@ -430,18 +430,51 @@ choice of the variance-of-variance parameter $\Sigma^2$.
 
 In the real problem of large-scale structure, it is intractable (probably) to 
 write down the true likelihood.
-
 The pseudo-likelihood gives wrong inferences.
-
 What is a cosmologist to do?
+We can simulate the Universe, but we can't write down a a likelihood.
+There is a large class of likelihood-free solutions, in which a model
+or simulation is used to generate fake data, and the posterior pdf can
+be sampled by carefully constructed comparison of simulated data to
+the real data.
+The simplest of these likelihood-free is approximate Bayesian
+computation (ABC)\footnote{ABC has been used in astronomy in HOGG, and
+  HOGG.}, a simple version of which we introduce now.
 
-There is a large class of likelihood-free solutions, in which a model or
-simulation is used to generate fake data, and the posHOGG HOGG
+The idea behind ABC is to generate simulated data that match the
+real data \emph{exactly} but in the space of sufficient statistics.
+In this problem, the empirical sample variance $s^2_y$ is a sufficient
+statistic for the variance, so we are going to generate simulated
+data, and find simulations that produce data that match our empirical
+variance (which happens to be $\samplevar$).
+In its simplest form (and there are many more complicated forms), ABC
+operates by taking samples from the prior (the prior pdf for $\mu,
+V$), generating fake data, and then rejecting the samples if the fake
+data are not ``close enough'' to the real data.
+To test ``close enough'', we compute a distance metric\footnote{There
+  are constraints on what this distance metric can be, described in
+  HOGG.} and compare it to a threshold.
+For a distance metric $\Delta^2$, we use something very like the
+pseudo-likelihood (\ref{eq:pseudo}):
+\begin{eqnarray}
+\Delta^2 &=& \frac{[s^2_y - \hat{s}^2_y]^2}{\Sigma^2}
+\label{eq:dist}\quad ,
+\end{eqnarray}
+where $\hat{s}^2_y$ is the empirical sample variance we get for a set
+of $N=5$ random draws from a gaussian with the prior-drawn parameters
+$\mu, V$, and we have kept $\Sigma^2$ as-is.
+When the distance threshold is set very large, ABC returns a prior
+sampling.
+In the limit that the distance threshold is very small, ABC returns a
+posterior sampling.
 
-HOGG: Introduce ABC and compare to the previous two inferences.
-Note that you have to simulate the data and compare.
-Note that this version of ABC is idiotic.
-
+\figurename~\ref{fig:abc} shows the ABC-generated posterior for a small
+threshold (set to 1/16 in this case).
+The distance metric $\Delta^2$ makes no reference to means, so it doesn't
+constrain the mean $\mu$.
+However, the ABC results for the variance $V$ are indistinguisable
+from the true posterior sampling shown in
+\figurename~\ref{fig:correct}.%
 \begin{figure}
 \includegraphics{abc_0005_-4.png}
 \caption{Same as \figurename~\ref{fig:correct} but now with the output
@@ -455,9 +488,13 @@ Note that this version of ABC is idiotic.
   inferences.\label{fig:abc}}
 \end{figure}
 
-\textbf{Take-home message 2:} \emph{If we use a variant of the pseudo-likelihood as
-  a distance function in ABC, we can get correct posterior inferences
-  without ever writing down a correct likelihood function.}
+\textbf{Take-home message 2:} \emph{If we use a variant of the
+  pseudo-likelihood as a distance metric for an ABC, we can get
+  correct posterior inferences without ever writing down a correct
+  likelihood function.}
+
+HOGG: Note that this version of ABC is idiotic.
+
 HOGG: This might be tractable for LSS...
 
 HOGG: Return to the LSS problem and discuss four things things: What
