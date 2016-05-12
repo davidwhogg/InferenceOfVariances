@@ -469,13 +469,12 @@ In the limit that the distance threshold is very small---provided that
 the distance metric compares all sufficient statistics in a convex
 scalar combination---ABC returns a posterior sampling.
 
-\figurename~\ref{fig:abc} shows the ABC-generated posterior for a small
-threshold (set to 1/16 in this case).
+\figurename~\ref{fig:abc} shows the ABC-generated posterior sampling
+for a small distance threshold (set to 1/16 in this case).
 The distance metric $\Delta^2$ makes no reference to means, so it doesn't
 constrain the mean $\mu$.
-However, the ABC results for the variance $V$ are indistinguisable
-from the true posterior sampling shown in
-\figurename~\ref{fig:correct}.%
+However, the ABC results for the variance $V$ are indistinguishable
+from the true posterior sampling shown in \figurename~\ref{fig:correct}.%
 \begin{figure}
 \includegraphics{abc_0005_-4.png}
 \caption{Same as \figurename~\ref{fig:correct} but now with the output
