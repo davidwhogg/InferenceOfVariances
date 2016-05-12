@@ -2,11 +2,10 @@
 % Copyright 2016 the author(s).
 
 % To-do
-% - be more specific about HOW the posterior is wrong.
-% - add in material about sigma_8 being biased low!!
 % - include the ABC description and results.
 % - finish first draft.
 % - cite Percival and Eisenstein. Be self-deprecating.
+% - cite ABC papers like Cisewski, Cameron.
 % - typeset projects properly (see acks)
 % - new AAS \software tags
 % - search for all occurrences of HOGG, DWH, or all-caps
@@ -83,7 +82,8 @@ the standard cosmological inferences, and try to suggest places where
 a change from the standard incorrect method to a new method would
 have the biggest impacts.
 We argue that this is likely to be important at the baryon acoustic
-scale and larger.
+scale and larger, and it is likely to lead to underestimates of
+amplitude parameters such as sigma-8.
 We emphasize that ABC is just one of many possible replacements for
 the pseudo-likelihood method.
 \end{abstract}
@@ -423,9 +423,24 @@ could make for $\Sigma^2$ such that our posterior inferences would e
 correct given this form for the pseudo-likelihood; that is, the method
 is not wrong because it is not conservative. It is wrong because it
 is using an unreasonable likelihood function.
+In particular, the biases---that the pseudo-likelihood permits low
+variances that ought to be ruled out, and that the pseudo-likelihood
+rules out high variances that are in fact acceptable---exist for any
+choice of the variance-of-variance parameter $\Sigma^2$.
+
+In the real problem of large-scale structure, it is intractable (probably) to 
+write down the true likelihood.
+
+The pseudo-likelihood gives wrong inferences.
+
+What is a cosmologist to do?
+
+There is a large class of likelihood-free solutions, in which a model or
+simulation is used to generate fake data, and the posHOGG HOGG
 
 HOGG: Introduce ABC and compare to the previous two inferences.
 Note that you have to simulate the data and compare.
+Note that this version of ABC is idiotic.
 
 \begin{figure}
 \includegraphics{abc_0005_-4.png}

@@ -85,7 +85,7 @@ def hoggvar(data):
     return np.sum((data - mean) ** 2) / float(len(data) - 1)
 
 def main(N):
-    np.random.seed(23)
+    np.random.seed(7)
     Nstr = "{:04d}".format(N)
 
     print("main: making fake data")
@@ -124,7 +124,7 @@ def main(N):
     ranges = [prior_info[0:2], prior_info[2:4]]
 
     print("main: running ABC (this might take a while)")
-    for log2thresh in [2, 0, -2. -4, ]:
+    for log2thresh in [2, 0, -2, -4, ]:
         thresh = 2. ** log2thresh
         print("working on threshold", thresh)
         abc_mcmc_samples = mcmc(pars0, ln_abc_function, 2*Tbig, (empiricalvar, varvar, N, thresh), abc=True)
