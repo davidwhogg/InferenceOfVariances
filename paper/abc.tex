@@ -465,8 +465,9 @@ of $N=5$ random draws from a gaussian with the prior-drawn parameters
 $\mu, V$, and we have kept $\Sigma^2$ as-is.
 When the distance threshold is set very large, ABC returns a prior
 sampling.
-In the limit that the distance threshold is very small, ABC returns a
-posterior sampling.
+In the limit that the distance threshold is very small---provided that
+the distance metric compares all sufficient statistics in a convex
+scalar combination---ABC returns a posterior sampling.
 
 \figurename~\ref{fig:abc} shows the ABC-generated posterior for a small
 threshold (set to 1/16 in this case).
