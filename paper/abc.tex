@@ -2,6 +2,7 @@
 % Copyright 2016 the author(s).
 
 % To-do
+% - get smarter about terminology between observation and theory and simulation etc.
 % - make a comment somewhere (early) about accuracy vs precision.
 % - make absolutely clear what is speculation and what is demonstrated.
 % - finish first draft.
@@ -249,9 +250,43 @@ That is, it doesn't even respect the basic properties of variances.
 And yet, this is \emph{precisely analogous to the standard practice in
   large-scale structure}.
 
-HOGG: Is this the place to explain standard practice in cosmology? YES.
+What's done in the real problem is the following:
+Observations are made of galaxies, quasars, lyman-alpha clouds, CMB
+temperature temperature fluctuations, or other tracer.
+From these observations, a set of empirical variances are constructed, in the
+form of a two-point correlation function or power
+spectrum.\footnote{There is a lot of science about how to construct
+  these estimator or measurements of two-point statistics. That's
+  beyond our scope here. The point here is just that they \emph{are}
+  constructed.}
+This leads to some set of $M$ variance measurements $q_m$ (of, say, the
+empirical correlation function in radial separation bins, or the
+angular power spectrum in spherical-harmonic orderbins, or the power
+spectrum in a spatial-scale bin.)
+These variance measurements $q_m$ are compared to a theoretical model (which makes
+predictions $\xi(r_m;\theta)$ for the measurements $q_m$) by a
+pseudo-likelihood that looks like a $\chi^2$:
+\begin{eqnarray}
+\ln p_\pseudo(\setof{q_m}_{m=1}^M\given\theta) &=&
+ -\frac{1}{2}\,\sum_{m=1}^M\sum_{m'=1}^M [q_m - \xi(r_m;\theta)]\,\Sigma^{-2}_{mm'}\,[q_{m'} - \xi(r_{m'};\theta)]
+\label{eq:pseudoreal}\quad ,
+\end{eqnarray}
+where the $\Sigma^{-2}_{mm'}$ are the elements of an inverse
+covariance matrix, computed from the theory, as discussed a bit more
+below, and the theoretical predictions $\xi(r_m;\theta)$ are a
+function of the cosmological parameters $\theta$ that we are trying to
+infer (that is, for which we want posterior samplings).\footnote{There
+  are a lot of things in this presentation that imply that we are
+  thinking about real-space three-dimensional correlation functions
+  (which we are), but the discussion applies to many other kinds of
+  experiments with essentially no adjustment.}
+This pseudo-likelihood may seem sensible---and huge resources are put
+into computing good values for the $\Sigma^{-2}_{mm'}$\footnote{For
+  example, \cite{percival}.}---but it is patently wrong, in the same
+way that the trivial-problem pseudo-likelihood (\ref{eq:pseudo}) is
+wrong.
 
-Since the non-negativity point---the point that nothing about the
+Since the non-negativity point---the point that nothing about the trivial-problem
 pseudo-likelihood in (\ref{eq:pseudo}) goes wrong when the variance
 $V$ goes near or below zero---is such a killing argument in the
 trivial problem, let's reflect for a moment on how this non-negativity
@@ -317,6 +352,10 @@ covariance tensors.\footnote{This has an important consequence for
   functions obeying Mercer's condition are under consideration,
   because the theory itself can only produce non-negative
   semi-definite functions.}
+Continuing the analogy with the trivial problem, in the real problem,
+one of the things that is clearly wrong with the pseudo-likelihood
+(\ref{eq:pseudoreal}) is that nothing goes strange or bad or singular as
+the function $\xi(r;\theta)$ starts to violate Mercer's condition.
 
 Now back to the trivial problem of determining the variance $V$ of a
 one-dimensional Gaussian from samples:
