@@ -390,7 +390,7 @@ $y_n$.
 These samples (and their empirical moments) are
 \begin{eqnarray}
 \setof{y_n}_{n=1}^N &=& \setof{\samples}
-\\
+\label{eq:data}\\
 \bar{y} &=& \samplemean
 \\
 s^2_y &=& \samplevar
@@ -414,7 +414,12 @@ The results are shown in \figurename~\ref{fig:correct} and
 \figurename~\ref{fig:pseudo}.%
 \begin{figure}
 \includegraphics{correct_0005.png}
-\caption{HOGG Foo.\label{fig:correct}}
+\caption{A posterior sampling for the mean $\mu$ and variance $V$,
+  given the data in (\ref{eq:data}), flat prior in the displayed
+  parameter space, and the (correct, appropriate) likelihood given in
+  (\ref{eq:truelf}). Note that the data are not consistent with very
+  small variances but they \emph{are} consistent with very large
+  variances.\label{fig:correct}}
 \end{figure}%
 \begin{figure}
 \includegraphics{pseudo_0005.png}
