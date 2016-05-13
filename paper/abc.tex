@@ -3,14 +3,9 @@
 
 % To-do
 % - get smarter about terminology between observation and theory and simulation etc.
-% - make a comment somewhere (early) about accuracy vs precision.
 % - make absolutely clear what is speculation and what is demonstrated.
-% - finish first draft.
-% - cite Percival and Eisenstein. Be self-deprecating.
-% - cite ABC papers like Cisewski, Cameron.
 % - typeset projects properly (see acks)
 % - new AAS \software tags
-% - search for all occurrences of HOGG, DWH, or all-caps
 
 \documentclass[12pt, letterpaper, preprint]{aastex}
 \usepackage{hyperref}
@@ -80,12 +75,10 @@ rather as a \emph{distance metric} in a likelihood-free inference or
 approximate Bayesian
 computation (ABC) method, correct posterior inferences can be drawn.
 We discuss the relationships between the toy problems shown here and
-the standard cosmological inferences, and try to suggest places where
-a change from the standard incorrect method to a new method would
-have the biggest impacts.
+the standard cosmological inferences; these may be underestimating
+the power in poorly measured (low signal-to-noise) modes.
 We argue that this is likely to be important at the baryon acoustic
-scale and larger, and it is likely to lead to underestimates of
-amplitude parameters such as sigma-8.
+scale and larger.
 We emphasize that ABC is just one of many possible replacements for
 the pseudo-likelihood method.
 \end{abstract}
@@ -123,6 +116,9 @@ We are going to step back and look at issues of principle in measuring
 variances, and see if there are small changes to be made to
 present-day cosmological practice that might improve future cosmological
 inferences.
+The context is that data sets are large, precisions are very high;
+in this context, we need to get the details right if we want to maintain
+not just precision but \emph{accuracy}.
 
 Imagine \emph{the most trivial variance estimation problem possible}:
 You have been given $N$ samples $y_n$ drawn fairly and independently (iid)
@@ -284,7 +280,9 @@ This pseudo-likelihood may seem sensible---and huge resources are put
 into computing good values for the $\Sigma^{-2}_{mm'}$\footnote{For
   example, \cite{percival}.}---but it is patently wrong, in the same
 way that the trivial-problem pseudo-likelihood (\ref{eq:pseudo}) is
-wrong.
+wrong.\footnote{While the author would like to make these points from
+  a moral high ground, his own \emph{most highly cited work} at time of
+  writing---\cite{eisenstein}---uses precisely this incorrect pseudo-likelihood.}
 
 Since the non-negativity point---the point that nothing about the trivial-problem
 pseudo-likelihood in (\ref{eq:pseudo}) goes wrong when the variance
@@ -432,7 +430,7 @@ The results are shown in \figurename~\ref{fig:correct} and
   \figurename~\ref{fig:correct}.\label{fig:pseudo}}
 \end{figure}
 
-Two comments on these results:
+Three comments on these results:
 First, the two inferences deliver very different results for the
 variance $V$. This is the most important point.
 In the pseudo-likelihood inference (\figurename~\ref{fig:pseudo}), the
@@ -440,15 +438,25 @@ pdf mean $\mu$ is unconstrained. This is because $\mu$ doesn't appear
 at all in the pseudo-likelihood! But the key point is that the
 posterior inferences about $V$ are very different, especially at very
 small and very large values of $V$.
-In particular, the pseudo-likelihood permits low variances that ought
-to be (truly) ruled out, and rules out high variances that are (truly)
-permitted. This might mean that large-scale structure projects using
-analogous methods might be biased low in power-spectrum amplitude
-parameters like $\sigma_8$.
 
 \textbf{Take-home message 1:} \emph{The standard practice in
   cosmology, even when applied to an extremely trivial problem,
   delivers incorrect inferences.}
+
+Second, the pseudo-likelihood permits low variances that ought
+to be (truly) ruled out, and rules out high variances that are (truly)
+permitted.
+This might mean that large-scale structure projects using analogous
+methods might be biased low in power-spectrum amplitude parameters
+like sigma-8.
+Because we have set $N=5$, we do not have a high signal-to-noise
+measurement of the variance.
+As $N$ increases, the variance will become more constrained, and the
+true likelihood and the pseudo-likelihood are expected to converge.
+That is, the problems with the pseudo-likelihood are most likely to be
+a problem at low signal-to-noise.
+In present-day cosmological experiments, these are at scales of the
+baryon acoustic feature and larger scales.
 
 Second, the use of the pseudo-likelihood (\ref{eq:pseudo}) required
 the setting of the variance-of-variance parameter $\Sigma^2$.
@@ -501,8 +509,11 @@ or simulation is used to generate fake data, and the posterior pdf can
 be sampled by carefully constructed comparison of simulated data to
 the real data.
 The simplest of these likelihood-free is approximate Bayesian
-computation (ABC)\footnote{ABC has been used in astronomy in HOGG, and
-  HOGG.}, a simple version of which we introduce now.
+computation (ABC)\footnote{See, for example, \url{https://en.wikipedia.org/wiki/Approximate_Bayesian_computation}.
+  ABC has been used in astronomy previously,
+  notably by \cite{cameron}.
+  It has been implemented for use in cosmological contexts by
+  \cite{ishida}.}, a simple version of which we introduce now.
 
 The idea behind ABC is to generate simulated data that match the
 real data \emph{exactly} but in the space of sufficient statistics.
@@ -515,8 +526,8 @@ operates by taking samples from the prior (the prior pdf for $\mu,
 V$), generating fake data, and then rejecting the samples if the fake
 data are not ``close enough'' to the real data.
 To test ``close enough'', we compute a distance metric\footnote{There
-  are constraints on what this distance metric can be, described in
-  HOGG.} and compare it to a threshold.
+  are constraints on what this distance metric can be; it has to have
+  some particular properties, such as being positive definite.} and compare it to a threshold.
 For a distance metric $\Delta^2$, we use something very like the
 pseudo-likelihood (\ref{eq:pseudo}):
 \begin{eqnarray}
@@ -560,28 +571,33 @@ No real likelihood function was harmed.%
   correct posterior inferences without ever writing down a correct
   likelihood function.}
 
-HOGG: Note that this version of ABC is idiotic.
+It is worth noting here that the naive version of ABC used in this
+\documentname\ is by no means the state of the art. There are many
+possible innovations possible in the area of adaptive sampling for ABC.
+In addition, there are very likely other kinds of likelihood-free
+inference that use machine learning methods to approximate the
+posterior pdf given a finite set of data simulations.
+The point of this paper is not to propagate a new method, but rather
+to criticize an old method, and encourage the cosmology community to
+search for the most appropriate (and correct) new methods.
 
-HOGG: This might be tractable for LSS...
+In general, ``ABC is a statistical method of last
+resort.''\footnote{This is a quotation from Jessi Cisewski (Yale).}
+It requires, in general, enormous numbers of full simulations of the
+data; these simulations are expensive!
+However, it is worth remembering that the current best practices in
+large-scale structure experiments is to use large suites of
+simulations to compute the inverse covariance matrix elements
+$\Sigma^{-2}_{nn'}$.
+That is, the ABC method is competing \emph{not} with methods that use no
+simulations, but rather methods that use many simulations already.
+All this means that it is likely that there \emph{are} tractable ABC
+methods for cosmology.\footnote{Indeed, some already exist, for
+  example the previously cited \cite{ishida}, and work by
+  our own group---Hahn, Vakili, \etal (in preparation).}
 
-HOGG: Return to the LSS problem and discuss four things things: What
-the RTTD is. What is the equivalent of the pseudo-likelihood
-(\ref{eq:pseudo})? How, in detail, cosmologists get the $\Sigma$
-horror. What ABC looks like. CITE HAHN AND VAKILI.
-
-HOGG: ABC IS JUST ONE OPTION; discuss other general kinds of options.
-They are vapor-ware!
-
-\textbf{Take-home message 3:} \emph{There are very likely to be
-  tractable versions of the ideas in this paper for large-scale
-  structure inferences.}
-Indeed, they might end up requiring less or comparable to current
-inferences with the pseudo-likelihood, for the simple reason that,
-right now, large numbers of simulations are required just to construct
-the covariance matrix $\Sigma$.
-HOGG: Check this...
-
-HOGG: Why might all this be tractable?
+\textbf{Take-home message 3:} \emph{There are likely to be tractable
+  versions of these ideas for large-scale structure inferences.}
 
 \acknowledgements
 It is a pleasure to thank
@@ -594,13 +610,17 @@ It is a pleasure to thank
   M.~J.~Vakili (NYU),
   and the Blanton--Hogg group meeting at NYU
 for valuable discussions.
-This work was supported by the NSF (HOGG) and NASA (HOGG).
+This work was supported by the National Science Foundation (grant AST-1517237).
 This project made use of the NASA Astrophysics Data System
 and open-source software Python, numpy, and matplotlib.
 
 \begin{thebibliography}{24}
+\bibitem[Cameron \& Pettitt(2012)]{cameron}
+  Cameron, E., \& Pettitt, A.~N.\ 2012, \mnras, 425, 44 
 \bibitem[Eisenstein \etal(2005)]{eisenstein}
   Eisenstein, D.~J., Zehavi, I., Hogg, D.~W., \etal, 2005, \apj, 633, 560 
+\bibitem[Ishida \etal(2015)]{ishida}
+  Ishida, E.~E.~O., Vitenti, S.~D.~P., Penna-Lima, M., \etal, 2015, Astronomy and Computing, 13, 1
 \bibitem[Percival \etal(2014)]{percival}
   Percival, W.~J., Ross, A.~J., S{\'a}nchez, A.~G., \etal, 2014, \mnras, 439, 2531
 \end{thebibliography}
