@@ -471,8 +471,9 @@ scalar combination---ABC returns a posterior sampling.
 
 \figurename~\ref{fig:abc} shows the ABC-generated posterior sampling
 for a small distance threshold (set to 1/16 in this case).
-The distance metric $\Delta^2$ makes no reference to means, so it doesn't
-constrain the mean $\mu$.
+The distance metric $\Delta^2$ in (\ref{eq:dist}) makes no reference
+to the empirical mean, so it doesn't constrain the true pdf mean
+$\mu$.
 However, the ABC results for the variance $V$ are indistinguishable
 from the true posterior sampling shown in \figurename~\ref{fig:correct}.%
 \begin{figure}
@@ -480,12 +481,12 @@ from the true posterior sampling shown in \figurename~\ref{fig:correct}.%
 \caption{Same as \figurename~\ref{fig:correct} but now with the output
   of the likelihood-free inference or ABC. Like in
   \figurename~\ref{fig:pseudo}, the ABC distance metric does not
-  involve the mean $\mu$, so it remains unconstrained and the
-  marginalized posterior pdf matches the prior pdf for this
-  parameter. The posterior on the variance $V$ looks very similar to
-  the correct answer shown in \figurename~\ref{fig:correct}. This
-  demonstrates that ABC can be used to draw correct
-  inferences.\label{fig:abc}}
+  involve the empirical sample mean, so the mean parameter $\mu$
+  remains unconstrained and the marginalized posterior pdf matches the
+  prior pdf for this parameter. The posterior on the variance $V$
+  looks very similar to the correct answer shown in
+  \figurename~\ref{fig:correct}. This demonstrates that ABC can be
+  used to draw correct inferences.\label{fig:abc}}
 \end{figure}
 
 \textbf{Take-home message 2:} \emph{If we use a variant of the
