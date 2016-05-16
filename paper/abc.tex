@@ -1,11 +1,9 @@
 % This document is part of the InferenceOfVariance project.
-% Copyright 2016 the author(s).
+% Copyright 2016 the author.
 
 % To-do
 % - get smarter about terminology between observation and theory and simulation etc.
 % - make absolutely clear what is speculation and what is demonstrated.
-% - typeset projects properly (see acks)
-% - new AAS \software tags
 
 \documentclass[12pt, letterpaper, preprint]{aastex}
 \usepackage{hyperref}
@@ -66,21 +64,21 @@ cosmological inferences using a pseudo-likelihood that compares
 (by something like chi-squared) a
 point estimate of the two-point function to an equivalent estimate
 from a simulation or theory.
-Here we show---with toy problems---that this procedure in general
+Here I show---with toy problems---that this procedure in general
 produces incorrect posterior inferences about the variance (and
 therefore cosmological parameters).
-However, we also show that if a very similar pseudo-likelihood
+However, I also show that if a very similar pseudo-likelihood
 is used
 \emph{not} as a likelihood in a standard probabilistic inference but
 rather as a \emph{distance metric} in a likelihood-free inference or
 approximate Bayesian
 computation (ABC) method, correct posterior inferences can be drawn.
-We discuss the relationships between the toy problems shown here and
+I discuss the relationships between the toy problems shown here and
 the standard cosmological inferences; these may be underestimating
 the power in poorly measured (low signal-to-noise) modes.
-We argue that this is likely to be important at the baryon acoustic
+I argue that this is likely to be important at the baryon acoustic
 scale and larger.
-We emphasize that ABC is just one of many possible replacements for
+I emphasize that ABC is just one of many possible replacements for
 the pseudo-likelihood method.
 \end{abstract}
 
@@ -114,8 +112,8 @@ two-point auto-correlation function---is critical to inference of the
 cosmological initial conditions and the cosmological parameters.
 There is an enormous literature on making these cosmological
 measurements!
-Here we won't address this literature in detail.
-We are going to step back and look at issues of principle in measuring
+Here I won't address this literature in detail.
+I am going to step back and look at issues of principle in measuring
 variances, and see if there are small changes to be made to
 present-day cosmological practice that might improve future cosmological
 inferences.
@@ -159,7 +157,7 @@ variance $V$?
 In contemporary cosmological experiments we \emph{always} want full
 posterior (or at least likelihood) information about the parameters.
 That is, the cosmological inference community is (mostly) Bayesian,
-so in what follows we will produce Bayesian outputs, which are (for
+so in what follows I will produce Bayesian outputs, which are (for
 our purposes) likelihood functions, posterior pdfs, and posterior
 samplings.
 
@@ -174,13 +172,13 @@ summary statistics.
 As we will see, however, it is also possible to write down an
 incorrect likelihood function using them!
 
-From here on, we will name the problem of inferring cosmological
+From here on, I will name the problem of inferring cosmological
 parameters from a large-scale structure survey or cosmic microwave
-background measurement the ``real problem'', and we will name the
+background measurement the ``real problem'', and I will name the
 problem of finding the variance $V$ of the one-dimensional Gaussian
 that generated the $y_n$ the ``trivial problem''.
 That doesn't make the trivial problem trivial.
-It is relatively subtle, as we hope you will agree by the end of this!
+It is relatively subtle, as I hope you will agree by the end of this!
 
 \section{Inference with a likelihood or pseudo-likelihood}
 
@@ -203,7 +201,7 @@ the likelihood in the cosmological context: It would require a pdf
 over all possible experimental outcomes, which means all possible
 positions of all possible galaxies in the survey volume.\footnote{We
   believe that there might be a tractable likelihood function for at
-  least some cosmological experiments. We are working on testing this
+  least some cosmological experiments. My group is working on testing this
   now. (Don't hold your breath.)}
 What's done instead is to compare the empirical variance (the
 correlation function or the power spectrum) of the observed data to
@@ -230,8 +228,11 @@ a \emph{pseudo-likelihood} $p_\pseudo(s^2_y\given V)$ of the form
 where $\Sigma^2$ is a variance on the variance, determined somehow (to
 be discussed more below).
 This pseudo-likelihood gets the prefix ``pseudo'' because it was
-created by an ansatz, and not by writing down our beliefs about the
-process by which the samples were generated.
+created by an ansatz, and not by writing down someone's reasonable
+beliefs about the process by which the samples were
+generated.\footnote{We believe (know) that the data were drawn from a
+  Gaussian, that does not mean that the likelihood for the
+  \emph{variance} is itself Gaussian!}
 It gets the suffix ``likelihood'' because it is a (made up)
 probability for the data given parameters, where in this case
 $s^2_y$ is a sufficient statistic of the data, and $V$ is a
@@ -258,7 +259,7 @@ From these observations, a set of empirical variances are constructed, in the
 form of a two-point correlation function or power
 spectrum.\footnote{There is a lot of science about how to construct
   these estimator or measurements of two-point statistics. That's
-  beyond our scope here. The point here is just that they \emph{are}
+  beyond the scope of this \documentname. The point here is just that they \emph{are}
   constructed.}
 This leads to some set of $M$ variance measurements $q_m$ (of, say, the
 empirical correlation function in radial separation bins, or the
@@ -277,9 +278,9 @@ covariance matrix, computed from the theory (as discussed a wee bit
 below), and the theoretical predictions $\xi(r_m;\theta)$ are a
 function of the cosmological parameters $\theta$ that we are trying to
 infer (that is, for which we want posterior samplings).\footnote{There
-  are a lot of things in this presentation that imply that we are
+  are a lot of things in this presentation that imply that I am
   thinking about real-space three-dimensional correlation functions
-  (which we are), but the discussion applies to many other kinds of
+  (which I am), but the discussion applies to many other kinds of
   experiments with essentially no adjustment.}
 This pseudo-likelihood may seem sensible---and huge resources\footnote{For
   example, \cite{percival}.} are put
@@ -321,8 +322,8 @@ where $E[q]$ is the expectation value of $q$ (implicitly taken as an integral
 over all possible draws of the density field $\rho(x)$ and over all space in each of those draws),
 $\rho$ is the density field,
 and $\bar{\rho}$ is the mean density.
-By assuming that $\xi(\cdot)$ depends only on the magnitude $|r|$ we are effectively
-assuming statistical isotropy.
+(By assuming that $\xi(\cdot)$ depends only on the magnitude $|r|$ I am effectively
+assuming statistical isotropy.)
 Now choose a spatial set of points $\setof{x_i}$ in three-dimensional space
 and construct the matrix $C$ such that the elements $C_{ij}$ of $C$
 are given by
@@ -364,7 +365,7 @@ Now back to the trivial problem of determining the variance $V$ of a
 one-dimensional Gaussian from samples:
 What exactly would be the Right Thing To Do in this problem?
 It is very straightforward:
-We write down the probability for each point, and product these
+Write down the probability for each point, and product these
 (or sum them in the log).
 For iid $y_n$ drawn from a Gaussian, this looks like this:
 \begin{eqnarray}
@@ -377,18 +378,18 @@ It is left as an exercise to the reader to show that this likelihood
 can be expressed in terms of (only) the two sufficient statistics given
 in equations~(\ref{eq:empmean}) and (\ref{eq:empvar}).\footnote{Hint:
   Equation~(\ref{eq:truelf}) is quadratic in the data.}
-Below, we will discuss the Right Thing To Do in the large-scale
-structure problem. It's hard!
+The equivalent of the Right Thing To Do in the large-scale
+structure problem is either extremely hard or intractable.
 
-In order to test these ideas quantitatively, we need fake data.
-Here we choose (arbitrarily) a True\footnote{Because we are making
-  fake data, we have access to God's Truth (with a capital
+In order to test these ideas quantitatively, I need fake data.
+Here I choose (arbitrarily) a True\footnote{Because I am making
+  fake data, I have access to God's Truth (with a capital
   ``T''). This is not the case for real astronomical measurements!}
 mean $\mu=7.0$ and True variance $V=17.0$ (units arbitrary).
 With code associated with this \documentname\footnote{The calculations
   and \figurename s in this \documentname\ were generated from the code in
   repository \giturl\ (with hash \texttt{\githash~\gitdate}). You can
-  clone this and run the code yourself!}, we generate $N=5$ samples
+  clone this and run the code yourself!}, I generate $N=5$ samples
 $y_n$.
 These samples (and their empirical moments) are
 \begin{eqnarray}
@@ -403,10 +404,10 @@ s^2_y &=& \samplevar
 Now imagine (without questioning) that our prior pdf for the
 parameters $\mu, V$ is uniform in the joint interval $0<\mu<10$ and
 $0<V<100$.
-At this stage, we have two options for inference: Use the correct
+At this stage, there are two options for inference: Use the correct
 likelihood (\ref{eq:truelf}) or else the pseudo-likelihood
 (\ref{eq:pseudo}).
-We do both, running a standard (but home-built) Metropolis--Hastings
+Here I do both, running a standard (but home-built) Metropolis--Hastings
 MCMC code for $524288$ steps, and thinning the chain by a factor of
 $16$.
 A Gaussian in each parameter $\mu,V$ was employed as a proposal
@@ -454,7 +455,7 @@ permitted.
 This might mean that large-scale structure projects using analogous
 methods might be biased low in power-spectrum amplitude parameters
 like sigma-8.
-Because we have set $N=5$, we do not have a high signal-to-noise
+Because I have set $N=5$, I do not have a high signal-to-noise
 measurement of the variance.
 As $N$ increases, the variance will become more constrained, and the
 true likelihood and the pseudo-likelihood are expected to converge.
@@ -465,7 +466,7 @@ baryon acoustic feature and larger scales.
 
 Second, the use of the pseudo-likelihood (\ref{eq:pseudo}) required
 the setting of the variance-of-variance parameter $\Sigma^2$.
-To set this, we made use of theory\footnote{\url{https://en.wikipedia.org/wiki/Variance}}
+To set this, I made use of theory\footnote{\url{https://en.wikipedia.org/wiki/Variance}}
 about the variance $\Var[s^2_y]$ of
 the empirical sample variance $s^2_y$.
 \begin{eqnarray}
@@ -478,13 +479,13 @@ For a Gaussian pdf this becomes
 \Var[s^2_y] &=& \frac{2\,V^2}{N-1}
 \quad .
 \end{eqnarray}
-For these reasons, we set the pseudo-likelihood parameter $\Sigma^2$ to
+For these reasons, I set the pseudo-likelihood parameter $\Sigma^2$ to
 \begin{eqnarray}
 \Sigma^2 &\leftarrow& \frac{2\,[s^2_y]^2}{N-1}
-\quad ,
+\label{eq:Sigma}\quad ,
 \end{eqnarray}
-where we are not being conservative because, for one, we are imagining
-that $s^2_y$ is a good estimator for $V$, and, for two, we are
+where I am not being conservative because, for one, I am imagining
+that $s^2_y$ is a good estimator for $V$, and, for two, I am 
 assuming implicitly that the true distribution has vanishing kurtosis
 (is nearly Gaussian).
 Although this choice is not conservative, it maps directly onto the
@@ -494,9 +495,9 @@ using simulations of the data-generating process with parameters set
 to something estimated from the data.\footnote{See, for example, \cite{percival}.}
 That is, the pseudo-likelihoods used in cosmology are not conservative
 in exactly this sense.
-It is important to note, however, that there is no choice that we
-could make for $\Sigma^2$ such that our posterior inferences would be
-correct given this form for the pseudo-likelihood; that is, the method
+It is important to note, however, that there is no choice that I
+could make for $\Sigma^2$ such that the posterior inferences would be
+correct given this form (\ref{eq:pseudo}) for the pseudo-likelihood; that is, the method
 is not wrong because it is not conservative. It is wrong because it
 is using an unreasonable likelihood function.
 In particular, the biases---that the pseudo-likelihood permits low
@@ -527,30 +528,30 @@ computation (ABC)\footnote{See, for example, \url{https://en.wikipedia.org/wiki/
   ABC has been used in astronomy previously,
   notably by \cite{cameron}.
   It has been implemented for use in cosmological contexts by
-  \cite{ishida}.}, a simple version of which we introduce now.
+  \cite{ishida}.}, a simple version of which I introduce now.
 
 The idea behind ABC is to generate simulated data that match the
 real data \emph{exactly} but in the space of sufficient statistics.
 In this problem, the empirical sample variance $s^2_y$ is a sufficient
-statistic for the variance, so we are going to generate simulated
-data, and find simulations that produce data that match our empirical
-variance (which happens to be $\samplevar$).
+statistic for the variance, so I am going to generate simulated
+data, and find simulations that produce data that match the empirical
+variance (which happens to be $s^2_y = \samplevar$).
 In its simplest form (and there are many more complicated forms), ABC
 operates by taking samples from the prior (the prior pdf for $\mu,
 V$), generating fake data, and then rejecting the samples if the fake
 data are not ``close enough'' to the real data.
-To test ``close enough'', we compute a distance metric\footnote{There
+To test ``close enough'', I compute a distance metric\footnote{There
   are constraints on what this distance metric can be; it has to have
   some particular properties, such as being positive definite.} and compare it to a threshold.
-For a distance metric $\Delta^2$, we use something very like the
+For a distance metric $\Delta^2$, I use something very like the
 pseudo-likelihood (\ref{eq:pseudo}):
 \begin{eqnarray}
 \Delta^2 &=& \frac{[s^2_y - \hat{s}^2_y]^2}{\Sigma^2}
 \label{eq:dist}\quad ,
 \end{eqnarray}
-where $\hat{s}^2_y$ is the empirical sample variance we get for a set
+where $\hat{s}^2_y$ is the empirical sample variance for a set
 of $N=5$ random draws from a gaussian with the prior-drawn parameters
-$\mu, V$, and we have kept $\Sigma^2$ as-is.
+$\mu, V$, and I have kept $\Sigma^2$ as-is (\ref{eq:Sigma}).
 In the limit that the distance threshold is set large, ABC returns a prior
 sampling.
 In the limit that the distance threshold is very small---provided that
@@ -580,8 +581,8 @@ No real likelihood function was harmed.%
   used to draw correct inferences.\label{fig:abc}}
 \end{figure}
 
-\textbf{Take-home message 2:} \emph{If we use a variant of the
-  pseudo-likelihood as a distance metric for an ABC, we can get
+\textbf{Take-home message 2:} \emph{If a variant of the
+  pseudo-likelihood is used as a distance metric for an ABC, it is possible to get
   correct posterior inferences without ever writing down a correct
   likelihood function.}
 
@@ -609,7 +610,7 @@ simulations, but rather methods that use many simulations already.
 \textbf{Take-home message 3:} \emph{There are likely to be tractable
   versions of these ideas for large-scale structure
   inferences.}\footnote{Indeed, some already exist, for example the
-  previously cited \cite{ishida}, and work by our own group---Hahn,
+  previously cited \cite{ishida}, and work by my own group---Hahn,
   Vakili, \etal\ (in preparation).}
 
 \acknowledgements
