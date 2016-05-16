@@ -98,6 +98,8 @@ cosmology: observations
 large-scale structure of universe
 }
 
+\section{Introduction: A real problem and a trivial one}
+
 Present-day large-scale structure experiments are fundamentally
 projects to measure the variance of cosmological fields, such as the
 galaxy, quasar, intergalactic medium, or mass fields.
@@ -122,7 +124,7 @@ in this context, we need to get the details right if we want to maintain
 not just precision but \emph{accuracy}.
 
 Imagine \emph{the most trivial variance estimation problem possible}:
-You have been given $N$ samples $y_n$ drawn fairly and independently (iid)
+You have been given $N$ samples $y_n$ drawn identically and independently (iid)
 from a Gaussian probability density function (hereafter ``pdf'').
 What is the mean $\mu$ and variance $V$ of the pdf from which they
 were drawn?
@@ -150,7 +152,7 @@ s^2_y &\equiv& \frac{1}{N-1}\,\sum_{n=1}^N [y_n - \bar{y}]^2
   variance of the density field---a sample variance. And while these empirical estimates
   will be sufficient statistics for the variance,
   this is only relevant and valuable if
-  they are used \emph{correctly}.} for the mean and variance of the
+  they are used \emph{correctly}.} for the mean $\mu$ and variance $V$ of the
 pdf from which the $y_n$ were drawn.
 That's cool, but what if we want full posterior information about the
 variance $V$?
@@ -180,6 +182,8 @@ that generated the $y_n$ the ``trivial problem''.
 That doesn't make the trivial problem trivial.
 It is relatively subtle, as we hope you will agree by the end of this!
 
+\section{Inference with a likelihood or pseudo-likelihood}
+
 The (Bayesian) Right Thing To Do in the trivial problem is to write
 down our beliefs about how the data were generated, and then derive
 (analytically or numerically) the posterior pdf\footnote{There will be
@@ -206,8 +210,8 @@ correlation function or the power spectrum) of the observed data to
 the variance observed in mock data or a simulation, and find
 parameters that generate simulations that generate similar observed
 variances.
-There is nothing wrong with this procedure in general.  There are a
-large family of methods by which this comparison could be performed
+There is nothing wrong with this procedure in general.  There is a
+family of methods (one of which is discussed below) by which this comparison could be performed
 that would generate correct inferences about the cosmological
 parameters.
 However, the cosmological community has not (generally) used any of
@@ -234,7 +238,7 @@ $s^2_y$ is a sufficient statistic of the data, and $V$ is a
 parameter of the unknown pdf from which the samples were drawn.
 Note the Bayesianism inherent here:
 The \emph{likelihood} is going to be the critical component of the
-inference; the likelihood is based on \emph{beliefs} about the
+inference; the likelihood is (supposed to be) based on \emph{beliefs} about the
 data-generation process; and the parameter $V$ of the pdf that
 generates the data is unknown (and, essentially, unknowable).
 
@@ -258,8 +262,8 @@ spectrum.\footnote{There is a lot of science about how to construct
   constructed.}
 This leads to some set of $M$ variance measurements $q_m$ (of, say, the
 empirical correlation function in radial separation bins, or the
-angular power spectrum in spherical-harmonic orderbins, or the power
-spectrum in a spatial-scale bin.)
+angular power spectrum in spherical-harmonic order bins, or the power
+spectrum in a spatial-scale bin).
 These variance measurements $q_m$ are compared to a theoretical model (which makes
 predictions $\xi(r_m;\theta)$ for the measurements $q_m$) by a
 pseudo-likelihood that looks like a $\chi^2$:
@@ -269,17 +273,17 @@ pseudo-likelihood that looks like a $\chi^2$:
 \label{eq:pseudoreal}\quad ,
 \end{eqnarray}
 where the $\Sigma^{-2}_{mm'}$ are the elements of an inverse
-covariance matrix, computed from the theory, as discussed a bit more
-below, and the theoretical predictions $\xi(r_m;\theta)$ are a
+covariance matrix, computed from the theory (as discussed a wee bit
+below), and the theoretical predictions $\xi(r_m;\theta)$ are a
 function of the cosmological parameters $\theta$ that we are trying to
 infer (that is, for which we want posterior samplings).\footnote{There
   are a lot of things in this presentation that imply that we are
   thinking about real-space three-dimensional correlation functions
   (which we are), but the discussion applies to many other kinds of
   experiments with essentially no adjustment.}
-This pseudo-likelihood may seem sensible---and huge resources are put
-into computing good values for the $\Sigma^{-2}_{mm'}$\footnote{For
-  example, \cite{percival}.}---but it is patently wrong, in the same
+This pseudo-likelihood may seem sensible---and huge resources\footnote{For
+  example, \cite{percival}.} are put
+into computing good values for the $\Sigma^{-2}_{mm'}$---but it is patently wrong, in the same
 way that the trivial-problem pseudo-likelihood (\ref{eq:pseudo}) is
 wrong.\footnote{While the author would like to make these points from
   a moral high ground, his own \emph{most highly cited work} at time of
@@ -299,8 +303,8 @@ It is that the correlation function (what ought to be called the
 ``covariance function'') be a non-negative semi-definite function, or
 that the correlation function obey what's called Mercer's condition\footnote{\url{https://en.wikipedia.org/wiki/Mercer\%27s_condition}}
 or that any covariance matrix made up by any evaluation of the
-correlation function on any grid of points be non-negative
-semi-definite.
+correlation function on any grid of points be a non-negative
+semi-definite matrix.
 These (identical) conditions are best explained with equations.
 
 First, define the correlation function $\xi(|r|)$ as the covariance of
@@ -491,7 +495,7 @@ to something estimated from the data.\footnote{See, for example, \cite{percival}
 That is, the pseudo-likelihoods used in cosmology are not conservative
 in exactly this sense.
 It is important to note, however, that there is no choice that we
-could make for $\Sigma^2$ such that our posterior inferences would e
+could make for $\Sigma^2$ such that our posterior inferences would be
 correct given this form for the pseudo-likelihood; that is, the method
 is not wrong because it is not conservative. It is wrong because it
 is using an unreasonable likelihood function.
@@ -500,8 +504,17 @@ variances that ought to be ruled out, and that the pseudo-likelihood
 rules out high variances that are in fact acceptable---exist for any
 choice of the variance-of-variance parameter $\Sigma^2$.
 
-In the real problem of large-scale structure, it is intractable (probably) to 
-write down the true likelihood.
+\section{Likelihood-free inference}
+
+In the real problem of large-scale structure, it is intractable
+(probably) to write down the true likelihood.\footnote{Since we think
+  that the large-scale structure is a (nonlinearly) processed
+  (amplified) Gaussian process, the likelihood function is a
+  nonlinearly transformed Gaussian process. The size of this problem
+  is (no smaller than) the inversion (or solve) of a matrix that is
+  $N\times N$, where $N$ is the number of galaxies (or tracers or
+  pixels or voxels) in the survey. That, naively, scales as
+  $N^{2.6}$. Hence: Intractable, unless we get some new math foo.}
 The pseudo-likelihood gives wrong inferences.
 What is a cosmologist to do?
 We can simulate the Universe, but we can't write down a a likelihood.
@@ -509,7 +522,7 @@ There is a large class of likelihood-free solutions, in which a model
 or simulation is used to generate fake data, and the posterior pdf can
 be sampled by carefully constructed comparison of simulated data to
 the real data.
-The simplest of these likelihood-free is approximate Bayesian
+The simplest of these likelihood-free methods is approximate Bayesian
 computation (ABC)\footnote{See, for example, \url{https://en.wikipedia.org/wiki/Approximate_Bayesian_computation}.
   ABC has been used in astronomy previously,
   notably by \cite{cameron}.
@@ -538,7 +551,7 @@ pseudo-likelihood (\ref{eq:pseudo}):
 where $\hat{s}^2_y$ is the empirical sample variance we get for a set
 of $N=5$ random draws from a gaussian with the prior-drawn parameters
 $\mu, V$, and we have kept $\Sigma^2$ as-is.
-When the distance threshold is set very large, ABC returns a prior
+In the limit that the distance threshold is set large, ABC returns a prior
 sampling.
 In the limit that the distance threshold is very small---provided that
 the distance metric compares all sufficient statistics in a convex
@@ -561,7 +574,7 @@ No real likelihood function was harmed.%
   \figurename~\ref{fig:pseudo}, the ABC distance metric does not
   involve the empirical sample mean, so the mean parameter $\mu$
   remains unconstrained and the marginalized posterior pdf matches the
-  prior pdf for this parameter. The posterior on the variance $V$
+  prior pdf (flat) for $\mu$. The posterior on the variance $V$
   looks very similar to the correct answer shown in
   \figurename~\ref{fig:correct}. This demonstrates that ABC can be
   used to draw correct inferences.\label{fig:abc}}
