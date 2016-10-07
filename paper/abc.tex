@@ -199,16 +199,17 @@ experiment!}
 The reason is simple: It is difficult or perhaps impossible to compute
 the likelihood in the cosmological context: It would require a pdf
 over all possible experimental outcomes, which means all possible
-positions of all possible galaxies in the survey volume.\footnote{We
-  believe that there might be a tractable likelihood function for at
-  least some cosmological experiments. My group is working on testing this
-  now. (Don't hold your breath.)}
+positions of all possible galaxies in the survey volume. 
+There is a long history of attempting to derive reliable approximations to the likelihood, 
+especially on large scales \cite[{\it e.g.}][]{Dodelson, Kitaura, Jasche}. 
+These were successful on specific data sets and problems ({\it e.g.}, for large scale reconstructions of the matter density field) but haven't become standard due to computational and modelling challenges.
 What's done instead is to compare the empirical variance (the
 correlation function or the power spectrum) of the observed data to
 the variance observed in mock data or a simulation, and find
 parameters that generate simulations that generate similar observed
 variances.
-There is nothing wrong with this procedure in general.  There is a
+There is nothing wrong with this procedure in general.
+There is a
 family of methods (one of which is discussed below) by which this comparison could be performed
 that would generate correct inferences about the cosmological
 parameters.
@@ -275,7 +276,8 @@ pseudo-likelihood that looks like a $\chi^2$:
 \end{eqnarray}
 where the $\Sigma^{-2}_{mm'}$ are the elements of an inverse
 covariance matrix, computed from the theory (as discussed a wee bit
-below), and the theoretical predictions $\xi(r_m;\theta)$ are a
+below)\footnote{The fact that the covariance of the variance itself is derived from mocks or via resampling techniques ({\it i.e.}, jackknife, bootstrap) must be reflected in the likelihood function \citep[see {\it e.g.}][]{Sellentin}}
+, and the theoretical predictions $\xi(r_m;\theta)$ are a
 function of the cosmological parameters $\theta$ that we are trying to
 infer (that is, for which we want posterior samplings).\footnote{There
   are a lot of things in this presentation that imply that I am
@@ -628,17 +630,29 @@ This work was supported by the National Science Foundation (grant AST-1517237).
 This project made use of the NASA Astrophysics Data System
 and open-source software Python, numpy, and matplotlib.
 
+\bibliography{bibfilename}
+
 \begin{thebibliography}{24}
 \bibitem[Cameron \& Pettitt(2012)]{cameron}
   Cameron, E., \& Pettitt, A.~N.\ 2012, \mnras, 425, 44 
+\bibitem[Dodelson, Hui, \& Jaffe(1997)]{Dodelson}
+	{Dodelson}, S. and {Hui}, L. and {Jaffe}, A., 1997, astro-ph/9712074
 \bibitem[Eisenstein \etal(2005)]{eisenstein}
   Eisenstein, D.~J., Zehavi, I., Hogg, D.~W., \etal, 2005, \apj, 633, 560 
+\bibitem[Kitaura, Jasche \& Metcalf(2010)]{Kitaura}
+	{Kitaura}, F.-S. and {Jasche}, J. and {Metcalf}, R.~B, 2010, \mnras, 403, 589-604
+\bibitem[Jasche  \& Wandelt(2013)]{Jasche}
+	{Jasche}, J. and {Wandelt}, B.~D., 2013, \apj, 779, 15
 \bibitem[Landy \& Szalay(1993)]{landy}
   Landy, S.~D., \& Szalay, A.~S.\ 1993, \apj, 412, 64 
 \bibitem[Ishida \etal(2015)]{ishida}
   Ishida, E.~E.~O., Vitenti, S.~D.~P., Penna-Lima, M., \etal, 2015, Astronomy and Computing, 13, 1
+\bibitem[Peebles(1994)]{peebles}
+  Peebles, P.~J.~E., 1994, Princeton University Press
 \bibitem[Percival \etal(2014)]{percival}
   Percival, W.~J., Ross, A.~J., S{\'a}nchez, A.~G., \etal, 2014, \mnras, 439, 2531
+ \bibitem[Sellentin \& Heavens(2016)]{Sellentin}
+ 	{Sellentin}, E. and {Heavens}, A.~F., 2016, \mnras, 456, L132-L136
 \end{thebibliography}
 
 \end{document}
